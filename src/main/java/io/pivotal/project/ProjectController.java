@@ -1,31 +1,35 @@
 package io.pivotal.project;
 
-import io.pivotal.project.burndown.ProjectService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
 class ProjectController {
 
-    private ProjectService burndownService;
+    private ProjectService projectService;
 
-    ProjectController(ProjectService burndownService) {
-        this.burndownService = burndownService;
+    @Autowired
+    ProjectController(ProjectService projectService) {
+        this.projectService = projectService;
     }
 
-    @GetMapping("projects/{projectId}/burndown")
-    @ResponseBody
-    ResponseEntity<Project> getProjectBurndown(@PathVariable int projectId) {
-        Optional<Project> project = burndownService.getBurndownForProjectId(projectId);
+    @GetMapping("projects/{projectId}")
+    ResponseEntity<Project> getProject(@PathVariable int projectId) {
+        Optional<Project> project = projectService.getProjectById(projectId);
         if (!project.isPresent()) {
             return new ResponseEntity<>(new Project(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(project.get(), HttpStatus.OK);
+    }
+
+    @PostMapping("/projects")
+    ResponseEntity<Project> createProject(@RequestBody CreateProjectApiRequest createProjectApiRequest) {
+        Project savedProject = projectService.saveProject(createProjectApiRequest.getProject());
+
+        return new ResponseEntity<>(savedProject, HttpStatus.CREATED);
     }
 }
