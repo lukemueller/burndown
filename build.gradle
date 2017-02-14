@@ -1,0 +1,17 @@
+group 'io.pivotal'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '1.5.0.RELEASE'
+
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.5.0.RELEASE'
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.6.2'
+}
