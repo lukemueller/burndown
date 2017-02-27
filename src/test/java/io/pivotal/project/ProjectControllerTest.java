@@ -102,7 +102,8 @@ public class ProjectControllerTest {
                     "  \"project\": {\n" +
                     "    \"name\": \"foo\",\n" +
                     "    \"start_date\": \"2016-11-28\",\n" +
-                    "    \"hourly_rate\": 105\n" +
+                    "    \"hourly_rate\": 105,\n" +
+                    "    \"budget\": 100000\n" +
                     "  }\n" +
                     "}"))
             .andExpect(status().isCreated());
@@ -113,6 +114,7 @@ public class ProjectControllerTest {
         assertThat(value.getName()).isEqualTo("foo");
         assertThat(value.getStartDate()).isEqualTo(LocalDate.of(2016, 11, 28));
         assertThat(value.getHourlyRate()).isEqualTo(105);
+        assertThat(value.getBudget()).isEqualTo(100000);
     }
 
     @Test

@@ -2,7 +2,6 @@ package io.pivotal.project;
 
 import io.pivotal.project.burndown.BurndownCsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ class ProjectService {
 
     Optional<Project> getProjectById(int projectId) {
         ProjectEntity projectEntityById = projectRepository.getProjectEntityById(projectId);
-        List<Float> burndownByProjectName = burndownCsvParser.getBurndownByProjectName(projectEntityById.getName());
+        List<Float> burndownByProjectName = burndownCsvParser.getBurndownForProjectEntity(projectEntityById);
 
         return Optional.of(new Project(
             projectEntityById.getId(),

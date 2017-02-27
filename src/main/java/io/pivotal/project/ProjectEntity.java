@@ -7,6 +7,7 @@ public class ProjectEntity {
     private String name;
     private int hourlyRate;
     private LocalDate startDate;
+    private int budget; // TODO - should expand to List<SOW> domain objects
 
     public ProjectEntity() {
     }
@@ -54,5 +55,13 @@ public class ProjectEntity {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+
+    public int getBudget() {
+        return budget;
+    }
+
+    public void setBudget(int budget) {
+        this.budget = budget;
     }
 }

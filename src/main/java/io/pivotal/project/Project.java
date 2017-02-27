@@ -12,6 +12,7 @@ public class Project {
     private int hourlyRate;
     @JsonProperty("start_date")
     private LocalDate startDate;
+    private int budget; // TODO - should expand to List<SOW> domain objects
     private List<Float> burndown;
 
     public Project() {
@@ -63,22 +64,19 @@ public class Project {
         this.startDate = startDate;
     }
 
+    public int getBudget() {
+        return budget;
+    }
+
+    public void setBudget(int budget) {
+        this.budget = budget;
+    }
+
     public List<Float> getBurndown() {
         return burndown;
     }
 
     public void setBurndown(List<Float> burndown) {
         this.burndown = burndown;
-    }
-
-    @Override
-    public String toString() {
-        return "Project{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            ", hourlyRate=" + hourlyRate +
-            ", startDate=" + startDate +
-            ", burndown=" + burndown +
-            '}';
     }
 }

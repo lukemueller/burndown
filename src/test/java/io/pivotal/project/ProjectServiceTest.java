@@ -13,7 +13,6 @@ import java.util.Random;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class ProjectServiceTest {
@@ -52,7 +51,7 @@ public class ProjectServiceTest {
         when(mockProjectRepository.getProjectEntityById(100)).thenReturn(stubbedProjectEntity);
 
         ArrayList<Float> stubbedBurndown = new ArrayList<>();
-        when(mockBurndownCsvParser.getBurndownByProjectName("some-name-that-matches-openair")).thenReturn(stubbedBurndown);
+        when(mockBurndownCsvParser.getBurndownForProjectEntity(stubbedProjectEntity)).thenReturn(stubbedBurndown);
 
         Optional<Project> project = projectService.getProjectById(100);
 
@@ -63,7 +62,7 @@ public class ProjectServiceTest {
     @Test
     public void getProjectById_defaultsBurndownToAnEmptyList() {
         when(mockProjectRepository.getProjectEntityById(anyInt())).thenReturn(new ProjectEntity());
-        when(mockBurndownCsvParser.getBurndownByProjectName(anyString())).thenReturn(null);
+        when(mockBurndownCsvParser.getBurndownForProjectEntity(any(ProjectEntity.class))).thenReturn(null);
 
         Project project = projectService.getProjectById(new Random().nextInt()).get();
 
