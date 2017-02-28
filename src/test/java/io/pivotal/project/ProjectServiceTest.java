@@ -73,7 +73,12 @@ public class ProjectServiceTest {
     public void saveProject_delegatesToProjectRepository() {
         when(mockProjectRepository.save(any())).thenReturn(new ProjectEntity());
 
-        projectService.saveProject(new Project("project-name", 150, LocalDate.MAX));
+        Project project = new Project("project-name", 150, LocalDate.MAX);
+        project.setName("project-name");
+        project.setHourlyRate(150);
+        project.setStartDate(LocalDate.MAX);
+        project.setBudget(75000);
+        projectService.saveProject(project);
 
         ArgumentCaptor<ProjectEntity> captor = ArgumentCaptor.forClass(ProjectEntity.class);
         verify(mockProjectRepository).save(captor.capture());
@@ -81,6 +86,7 @@ public class ProjectServiceTest {
         assertThat(value.getName()).isEqualTo("project-name");
         assertThat(value.getHourlyRate()).isEqualTo(150);
         assertThat(value.getStartDate()).isEqualTo(LocalDate.MAX);
+        assertThat(value.getBudget()).isEqualTo(75000);
     }
 
     @Test

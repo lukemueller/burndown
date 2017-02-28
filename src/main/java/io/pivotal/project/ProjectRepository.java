@@ -27,10 +27,11 @@ class ProjectRepository {
 
     ProjectEntity save(ProjectEntity projectEntity) {
         jdbcTemplate.update(
-            "INSERT INTO projects (name, start_date, hourly_rate) VALUES (?, ?, ?);",
+            "INSERT INTO projects (name, start_date, hourly_rate, budget) VALUES (?, ?, ?, ?);",
             projectEntity.getName(),
             projectEntity.getStartDate(),
-            projectEntity.getHourlyRate()
+            projectEntity.getHourlyRate(),
+            projectEntity.getBudget()
         );
 
         return getProjectEntityByNameAndStateDateAndHourlyRate(projectEntity);
@@ -51,7 +52,8 @@ class ProjectRepository {
             rs.getInt("id"),
             rs.getString("name"),
             rs.getDate("start_date").toLocalDate(),
-            rs.getInt("hourly_rate")
+            rs.getInt("hourly_rate"),
+            rs.getInt("budget")
         );
     }
 }

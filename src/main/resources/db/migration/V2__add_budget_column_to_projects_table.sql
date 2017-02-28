@@ -1,0 +1,2 @@
+ALTER TABLE projects
+ADD budget INT NOT NULL

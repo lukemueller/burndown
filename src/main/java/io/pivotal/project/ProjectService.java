@@ -34,11 +34,13 @@ class ProjectService {
     }
 
     Project saveProject(Project project) {
-        ProjectEntity savedProjectEntity = projectRepository.save(new ProjectEntity(
-            project.getName(),
-            project.getStartDate(),
-            project.getHourlyRate()
-        ));
+        ProjectEntity projectEntity = new ProjectEntity();
+        projectEntity.setName(project.getName());
+        projectEntity.setStartDate(project.getStartDate());
+        projectEntity.setHourlyRate(project.getHourlyRate());
+        projectEntity.setBudget(project.getBudget());
+
+        ProjectEntity savedProjectEntity = projectRepository.save(projectEntity);
 
         return new Project(
             savedProjectEntity.getId(),

@@ -15,6 +15,7 @@ public class WeeklySpendCalculatorTest {
         ProjectEntity projectEntity = new ProjectEntity();
         projectEntity.setName("test-project-name");
         projectEntity.setHourlyRate(10);
+        projectEntity.setStartDate(LocalDate.of(2015, 10, 26));
 
         WeeklySpendCalculator calculator = new WeeklySpendCalculator();
         Map<LocalDate, Float> weeklySpend = calculator.getWeeklySpendForProjectEntity(projectEntity);
@@ -24,5 +25,4 @@ public class WeeklySpendCalculatorTest {
         assertThat(weeklySpend.get(LocalDate.of(2015, 11, 2))).isEqualTo(110f);
         assertThat(weeklySpend.get(LocalDate.of(2015, 11, 9))).isEqualTo(60f);
     }
-
 }
