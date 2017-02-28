@@ -5,14 +5,14 @@ import java.time.LocalDate;
 public class ProjectEntity {
     private int id;
     private String name;
-    private int hourlyRate;
     private LocalDate startDate;
+    private int hourlyRate;
     private int budget; // TODO - should expand to List<SOW> domain objects
 
     public ProjectEntity() {
     }
 
-    public ProjectEntity(int id, String name, LocalDate startDate, int hourlyRate, int budget) {
+    ProjectEntity(int id, String name, LocalDate startDate, int hourlyRate, int budget) {
         this.id = id;
         this.name = name;
         this.hourlyRate = hourlyRate;
@@ -20,20 +20,7 @@ public class ProjectEntity {
         this.budget = budget;
     }
 
-    public ProjectEntity(int id, String name, LocalDate startDate, int hourlyRate) {
-        this.id = id;
-        this.name = name;
-        this.startDate = startDate;
-        this.hourlyRate = hourlyRate;
-    }
-
-    public ProjectEntity(String name, LocalDate startDate, int hourlyRate) {
-        this.name = name;
-        this.startDate = startDate;
-        this.hourlyRate = hourlyRate;
-    }
-
-    public int getId() {
+    int getId() {
         return id;
     }
 
@@ -49,20 +36,20 @@ public class ProjectEntity {
         this.name = name;
     }
 
-    public int getHourlyRate() {
-        return hourlyRate;
-    }
-
-    public void setHourlyRate(int hourlyRate) {
-        this.hourlyRate = hourlyRate;
-    }
-
     public LocalDate getStartDate() {
         return startDate;
     }
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+
+    public int getHourlyRate() {
+        return hourlyRate;
+    }
+
+    public void setHourlyRate(int hourlyRate) {
+        this.hourlyRate = hourlyRate;
     }
 
     public int getBudget() {

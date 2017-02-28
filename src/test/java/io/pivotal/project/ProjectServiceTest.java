@@ -33,7 +33,7 @@ public class ProjectServiceTest {
     public void getProjectById_setsProjectFieldsFromRepositoryEntity() {
         LocalDate stubbedLocalDate = LocalDate.of(2017, 2, 13);
         int stubbedHourlyRate = 500;
-        ProjectEntity stubbedProjectEntity = new ProjectEntity(123, "foo-bar", stubbedLocalDate, stubbedHourlyRate);
+        ProjectEntity stubbedProjectEntity = new ProjectEntity(123, "foo-bar", stubbedLocalDate, stubbedHourlyRate, 50000);
         when(mockProjectRepository.getProjectEntityById(56)).thenReturn(stubbedProjectEntity);
 
         Optional<Project> project = projectService.getProjectById(56);
@@ -43,11 +43,12 @@ public class ProjectServiceTest {
         assertThat(actualProject.getName()).isEqualTo("foo-bar");
         assertThat(actualProject.getStartDate()).isEqualTo(stubbedLocalDate);
         assertThat(actualProject.getHourlyRate()).isEqualTo(stubbedHourlyRate);
+        assertThat(actualProject.getBudget()).isEqualTo(50000);
     }
 
     @Test
     public void getProjectById_setsBurndownListFromCsvParser() {
-        ProjectEntity stubbedProjectEntity = new ProjectEntity(2, "some-name-that-matches-openair", null, 0);
+        ProjectEntity stubbedProjectEntity = new ProjectEntity(2, "some-name-that-matches-openair", null, 0, 0);
         when(mockProjectRepository.getProjectEntityById(100)).thenReturn(stubbedProjectEntity);
 
         ArrayList<Float> stubbedBurndown = new ArrayList<>();
@@ -73,7 +74,7 @@ public class ProjectServiceTest {
     public void saveProject_delegatesToProjectRepository() {
         when(mockProjectRepository.save(any())).thenReturn(new ProjectEntity());
 
-        Project project = new Project("project-name", 150, LocalDate.MAX);
+        Project project = new Project();
         project.setName("project-name");
         project.setHourlyRate(150);
         project.setStartDate(LocalDate.MAX);
@@ -91,7 +92,7 @@ public class ProjectServiceTest {
 
     @Test
     public void saveProject_returnsNewlyCreatedProject() {
-        ProjectEntity stubbedProject = new ProjectEntity(10, "baz", LocalDate.MIN, 75);
+        ProjectEntity stubbedProject = new ProjectEntity(10, "baz", LocalDate.MIN, 75, 10000);
         when(mockProjectRepository.save(any())).thenReturn(stubbedProject);
 
         Project createdProject = projectService.saveProject(new Project());
@@ -100,6 +101,7 @@ public class ProjectServiceTest {
         assertThat(createdProject.getName()).isEqualTo("baz");
         assertThat(createdProject.getHourlyRate()).isEqualTo(75);
         assertThat(createdProject.getStartDate()).isEqualTo(LocalDate.MIN);
+        assertThat(createdProject.getBudget()).isEqualTo(10000);
         assertThat(createdProject.getBurndown()).isEmpty();
     }
 

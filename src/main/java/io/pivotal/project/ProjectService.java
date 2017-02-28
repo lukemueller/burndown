@@ -29,6 +29,7 @@ class ProjectService {
             projectEntityById.getName(),
             projectEntityById.getHourlyRate(),
             projectEntityById.getStartDate(),
+            projectEntityById.getBudget(),
             burndownByProjectName == null ? new ArrayList<>() : burndownByProjectName
         ));
     }
@@ -47,6 +48,7 @@ class ProjectService {
             savedProjectEntity.getName(),
             savedProjectEntity.getHourlyRate(),
             savedProjectEntity.getStartDate(),
+            savedProjectEntity.getBudget(),
             new ArrayList<>()
         );
     }

@@ -3,6 +3,7 @@ package io.pivotal.project;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Project {
@@ -18,18 +19,22 @@ public class Project {
     public Project() {
     }
 
-    public Project(int id, String name, int hourlyRate, LocalDate startDate, List<Float> burndown) {
+    public Project(int id, String name, int hourlyRate, LocalDate startDate, int budget, List<Float> burndown) {
         this.id = id;
         this.name = name;
         this.hourlyRate = hourlyRate;
         this.startDate = startDate;
+        this.budget = budget;
         this.burndown = burndown;
     }
 
-    public Project(String name, int hourlyRate, LocalDate startDate) {
-        this.name = name;
-        this.hourlyRate = hourlyRate;
-        this.startDate = startDate;
+    public Project(ProjectEntity projectEntity) {
+        this.id = projectEntity.getId();
+        this.name = projectEntity.getName();
+        this.hourlyRate = projectEntity.getHourlyRate();
+        this.startDate = projectEntity.getStartDate();
+        this.budget = projectEntity.getBudget();
+        this.burndown = new ArrayList<>();
     }
 
     public int getId() {
