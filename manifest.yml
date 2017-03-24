@@ -1,0 +1,8 @@
+---
+applications:
+- name: burndown-dev
+  memory: 1G
+  path: build/libs/burndown-1.0-SNAPSHOT.jar
+  buildpack: java_buildpack
+  services:
+     - burndown-cleardb-dev
