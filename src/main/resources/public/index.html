@@ -226,64 +226,73 @@
 
         // -------------------------------------------
 
-        Highcharts.chart('container', {
-            chart: {
-                type: 'area'
-            },
-            title: {
-                text: 'Burndown'
-            },
-            plotOptions: {
-                series: {
-                    pointStart: Date.UTC(2016, 10, 7),
-                    pointInterval: 7 * 24 * 3600 * 1000 // one week
+        $.ajax({
+            url: "http://localhost:8080/projects/12",
+            crossDomain: true,
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            }
+        }).done(function(response) {
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'area'
                 },
-                area: {
-                    lineWidth: 1,
-                    states: {
-                        hover: {
-                            lineWidth: 1
+                title: {
+                    text: 'Burndown'
+                },
+                plotOptions: {
+                    series: {
+                        pointStart: Date.UTC(2016, 10, 7),
+                        pointInterval: 7 * 24 * 3600 * 1000 // one week
+                    },
+                    area: {
+                        lineWidth: 1,
+                        states: {
+                            hover: {
+                                lineWidth: 1
+                            }
                         }
                     }
-                }
-            },
-            xAxis: {
-                type: 'datetime'
-            },
-            yAxis: {
-                title: {
-                    text: 'Remaining Budget ($)'
+                },
+                xAxis: {
+                    type: 'datetime'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Remaining Budget ($)'
 
+                    },
+                    type: 'linear',
+                    max: 697467,
+                    min: 0,
+                    tickInterval: 10000
                 },
-                type: 'linear',
-                max: 697467,
-                min: 0,
-                tickInterval: 10000
-            },
-            tooltip: {
-                valuePrefix: '$',
-                crosshairs: true
-            },
-            legend: {
-                layout: 'horizontal',
-                align: 'center',
-                verticalAlign: 'bottom',
-                borderWidth: 0
-            },
-            series: [{
-                name: 'Remaining Budget',
-                marker: {
-                    radius: 1
+                tooltip: {
+                    valuePrefix: '$',
+                    crosshairs: true
                 },
-                data: [685398, 672698, 661205, 633087, 623466, 611285, 587924, 584949, 564132, 557369, 522812, 501188, 489087, 475002, 465832, 439420, 417319, 389734, 364427, 347403, 314013, 282620]
-            }, {
-                name: 'Projected',
-                type: 'line',
-                marker: {
-                    radius: 1
+                legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    borderWidth: 0
                 },
-                data: [685398, 672698, 661205, 633087, 623466, 611285, 587924, 584949, 564132, 557369, 522812, 501188, 489087, 475002, 465832, 439420, 417319, 389734, 364427, 347403, 314013, 282620, 242620, 202620, 162620, 122620, 82620, 42620, 0]
-            }]
+                series: [{
+                    name: 'Remaining Budget',
+                    marker: {
+                        radius: 1
+                    },
+                    data: response.burndown
+                }, {
+                    name: 'Projected',
+                    type: 'line',
+                    marker: {
+                        radius: 1
+                    },
+                    data: [685398, 672698, 661205, 633087, 623466, 611285, 587924, 584949, 564132, 557369, 522812, 501188, 489087, 475002, 465832, 439420, 417319, 389734, 364427, 347403, 314013, 282620, 242620, 202620, 162620, 122620, 82620, 42620, 0]
+                }]
+            });
         });
+
     })();
 </script>
