@@ -227,12 +227,22 @@
         // -------------------------------------------
 
         $.ajax({
-            url: "http://localhost:8080/projects/12",
-            crossDomain: true,
-            headers: {
-                "Access-Control-Allow-Origin": "*"
+            url: "projects/12"
+        }).done(function (response) {
+            var burndown = response.burndown;
+            var averageWeeklySpend = (response.budget - burndown[burndown.length - 1]) / burndown.length-1;
+            var projectedBurndown = [];
+            var remainingBudgetInProjection = response.budget;
+            while(true) {
+                remainingBudgetInProjection -= averageWeeklySpend;
+                if (remainingBudgetInProjection < 0 || remainingBudgetInProjection < averageWeeklySpend) {
+                    projectedBurndown.push(0);
+                    break;
+                }
+
+                projectedBurndown.push(remainingBudgetInProjection);
             }
-        }).done(function(response) {
+
             Highcharts.chart('container', {
                 chart: {
                     type: 'area'
@@ -282,14 +292,14 @@
                     marker: {
                         radius: 1
                     },
-                    data: response.burndown
+                    data: burndown
                 }, {
                     name: 'Projected',
                     type: 'line',
                     marker: {
                         radius: 1
                     },
-                    data: [685398, 672698, 661205, 633087, 623466, 611285, 587924, 584949, 564132, 557369, 522812, 501188, 489087, 475002, 465832, 439420, 417319, 389734, 364427, 347403, 314013, 282620, 242620, 202620, 162620, 122620, 82620, 42620, 0]
+                    data: projectedBurndown
                 }]
             });
         });
