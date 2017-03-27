@@ -22,6 +22,11 @@ class ProjectService {
 
     Optional<Project> getProjectById(int projectId) {
         ProjectEntity projectEntityById = projectRepository.getProjectEntityById(projectId);
+
+        if (projectEntityById == null) {
+            return Optional.empty();
+        }
+
         List<Float> burndownByProjectName = burndownCsvParser.getBurndownForProjectEntity(projectEntityById);
 
         return Optional.of(new Project(

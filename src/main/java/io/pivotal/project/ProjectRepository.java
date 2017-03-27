@@ -1,6 +1,7 @@
 package io.pivotal.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -18,11 +19,15 @@ class ProjectRepository {
     }
 
     ProjectEntity getProjectEntityById(int projectId) {
-        return jdbcTemplate.queryForObject(
-            "SELECT * FROM projects WHERE id = ?",
-            getProjectEntityRowMapper(),
-            projectId
-        );
+        try {
+            return jdbcTemplate.queryForObject(
+                "SELECT * FROM projects WHERE id = ?",
+                getProjectEntityRowMapper(),
+                projectId
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     ProjectEntity save(ProjectEntity projectEntity) {

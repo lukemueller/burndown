@@ -50,6 +50,14 @@ public class ProjectRepositoryTest {
     }
 
     @Test
+    public void getProjectEntityById_returnsNullOnEmptyResultDataAccessException() {
+        int ID_THAT_DOES_NOT_EXIST = 738;
+        ProjectEntity savedEntity = projectRepository.getProjectEntityById(ID_THAT_DOES_NOT_EXIST);
+
+        assertThat(savedEntity).isNull();
+    }
+
+    @Test
     public void save_returnsFullyHydratedProjectEntity() {
         ProjectEntity projectEntity = new ProjectEntity();
         projectEntity.setName("name-to-save");

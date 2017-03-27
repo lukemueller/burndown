@@ -71,6 +71,15 @@ public class ProjectServiceTest {
     }
 
     @Test
+    public void getProjectById_returnsEmptyOptionalWhenRepositoryReturnsNull() {
+        when(mockProjectRepository.getProjectEntityById(anyInt())).thenReturn(null);
+
+        Optional<Project> projectById = projectService.getProjectById(new Random().nextInt());
+
+        assertThat(projectById.isPresent()).isFalse();
+    }
+
+    @Test
     public void saveProject_delegatesToProjectRepository() {
         when(mockProjectRepository.save(any())).thenReturn(new ProjectEntity());
 
