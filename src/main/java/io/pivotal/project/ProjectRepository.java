@@ -7,6 +7,10 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.sql.Date;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 class ProjectRepository {
@@ -16,6 +20,19 @@ class ProjectRepository {
     @Autowired
     public ProjectRepository(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
+    public List<ProjectEntity> getAllProjectEntities() {
+        return jdbcTemplate.queryForList(
+            "SELECT * FROM projects"
+        ).stream()
+            .map(r -> new ProjectEntity(
+                (int) r.get("id"),
+                (String) r.get("name"),
+                ((Date) r.get("start_date")).toLocalDate(),
+                (int) r.get("hourly_rate"),
+                (int) r.get("budget")
+            )).collect(toList());
     }
 
     ProjectEntity getProjectEntityById(int projectId) {

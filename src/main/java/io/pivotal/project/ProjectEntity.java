@@ -12,6 +12,13 @@ public class ProjectEntity {
     public ProjectEntity() {
     }
 
+    protected ProjectEntity(String name, LocalDate startDate, int hourlyRate, int budget) {
+        this.name = name;
+        this.hourlyRate = hourlyRate;
+        this.startDate = startDate;
+        this.budget = budget;
+    }
+
     ProjectEntity(int id, String name, LocalDate startDate, int hourlyRate, int budget) {
         this.id = id;
         this.name = name;

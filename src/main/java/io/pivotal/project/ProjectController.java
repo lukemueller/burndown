@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,12 +18,18 @@ class ProjectController {
         this.projectService = projectService;
     }
 
+    @GetMapping("/projects")
+    List<Project> listProjects() {
+        return projectService.getAllProjects();
+    }
+
     @GetMapping("projects/{projectId}")
     ResponseEntity<Project> getProject(@PathVariable int projectId) {
         Optional<Project> project = projectService.getProjectById(projectId);
         if (!project.isPresent()) {
             return new ResponseEntity<>(new Project(), HttpStatus.NOT_FOUND);
         }
+
         return new ResponseEntity<>(project.get(), HttpStatus.OK);
     }
 

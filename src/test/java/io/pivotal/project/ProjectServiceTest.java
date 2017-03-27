@@ -6,9 +6,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -27,6 +25,31 @@ public class ProjectServiceTest {
         mockBurndownCsvParser = mock(BurndownCsvParser.class);
 
         projectService = new ProjectService(mockProjectRepository, mockBurndownCsvParser);
+    }
+
+    @Test
+    public void getAllProjects_setsProjectFieldsFromRepositoryEntities() {
+        ProjectEntity firstProjectEntity = new ProjectEntity(123, "project-1", LocalDate.MAX, 500, 10000);
+        ProjectEntity secondProjectEntity = new ProjectEntity(456, "project-2", LocalDate.MIN, 250, 75000);
+        List<ProjectEntity> projectEntities = Arrays.asList(firstProjectEntity, secondProjectEntity);
+        when(mockProjectRepository.getAllProjectEntities()).thenReturn(projectEntities);
+
+        List<Project> allProjects = projectService.getAllProjects();
+
+        assertThat(allProjects).hasSize(2);
+        Project firstProject = allProjects.get(0);
+        assertThat(firstProject.getId()).isEqualTo(123);
+        assertThat(firstProject.getName()).isEqualTo("project-1");
+        assertThat(firstProject.getHourlyRate()).isEqualTo(500);
+        assertThat(firstProject.getStartDate()).isEqualTo(LocalDate.MAX);
+        assertThat(firstProject.getBudget()).isEqualTo(10000);
+
+        Project secondProject = allProjects.get(1);
+        assertThat(secondProject.getId()).isEqualTo(456);
+        assertThat(secondProject.getName()).isEqualTo("project-2");
+        assertThat(secondProject.getHourlyRate()).isEqualTo(250);
+        assertThat(secondProject.getStartDate()).isEqualTo(LocalDate.MIN);
+        assertThat(secondProject.getBudget()).isEqualTo(75000);
     }
 
     @Test

@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Random;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
@@ -32,16 +34,24 @@ public class ProjectRepositoryTest {
     }
 
     @Test
-    public void getProjectEntityById_returnsEntitySavedInDB() {
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setName("test-name");
-        projectEntity.setStartDate(LocalDate.of(1999, 12, 31));
-        projectEntity.setHourlyRate(750);
-        projectEntity.setBudget(150000);
+    public void getAllProjectEntities() {
+        ProjectEntity firstSavedEntity = projectRepository.save(generateRandomEntity());
+        ProjectEntity secondSavedEntity = projectRepository.save(generateRandomEntity());
 
+        List<ProjectEntity> allProjectEntities = projectRepository.getAllProjectEntities();
+
+        assertThat(allProjectEntities).hasSize(2);
+        assertThat(allProjectEntities.get(0).getId()).isEqualTo(firstSavedEntity.getId());
+        assertThat(allProjectEntities.get(1).getId()).isEqualTo(secondSavedEntity.getId());
+    }
+
+    @Test
+    public void getProjectEntityById_returnsEntitySavedInDB() {
+        ProjectEntity projectEntity = new ProjectEntity("test-name", LocalDate.of(1999, 12, 31), 750, 150000);
         ProjectEntity save = projectRepository.save(projectEntity);
 
         ProjectEntity savedEntity = projectRepository.getProjectEntityById(save.getId());
+
         assertThat(savedEntity.getId()).isEqualTo(1);
         assertThat(savedEntity.getName()).isEqualTo("test-name");
         assertThat(savedEntity.getStartDate()).isEqualTo(LocalDate.of(1999, 12, 31));
@@ -72,5 +82,19 @@ public class ProjectRepositoryTest {
         assertThat(savedProjectEntity.getHourlyRate()).isEqualTo(365);
         assertThat(savedProjectEntity.getStartDate()).isEqualTo(LocalDate.of(2018, 8, 30));
         assertThat(savedProjectEntity.getBudget()).isEqualTo(25000);
+    }
+
+    private ProjectEntity generateRandomEntity() {
+        Random random = new Random();
+
+        return new ProjectEntity(
+            String.valueOf(random.nextInt()),
+            LocalDate.of(
+                random.nextInt(3000),
+                random.nextInt(11) + 1,
+                random.nextInt(27) + 1),
+            random.nextInt(),
+            random.nextInt()
+        );
     }
 }

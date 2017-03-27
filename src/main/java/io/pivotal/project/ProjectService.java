@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 class ProjectService {
 
@@ -18,6 +20,14 @@ class ProjectService {
     public ProjectService(ProjectRepository projectRepository, BurndownCsvParser burndownCsvParser) {
         this.projectRepository = projectRepository;
         this.burndownCsvParser = burndownCsvParser;
+    }
+
+    List<Project> getAllProjects() {
+        return projectRepository
+            .getAllProjectEntities()
+            .stream()
+            .map(Project::new)
+            .collect(toList());
     }
 
     Optional<Project> getProjectById(int projectId) {

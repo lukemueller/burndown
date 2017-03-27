@@ -10,6 +10,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,6 +36,24 @@ public class ProjectControllerTest {
         controller = new ProjectController(mockProjectService);
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+    }
+
+    @Test
+    public void listProjects_requestMapping() throws Exception {
+        when(mockProjectService.getProjectById(anyInt())).thenReturn(Optional.of(new Project()));
+
+        mockMvc
+            .perform(get("/projects"))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    public void listProjects_returnsListOfProjectsFromProjectService() {
+        when(mockProjectService.getAllProjects()).thenReturn(Arrays.asList(new Project(), new Project()));
+
+        List<Project> projects = controller.listProjects();
+
+        assertThat(projects).hasSize(2);
     }
 
     @Test
