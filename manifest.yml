@@ -4,5 +4,7 @@ applications:
   memory: 1G
   path: build/libs/burndown-1.0-SNAPSHOT.jar
   buildpack: java_buildpack
+  env:
+    SPRING_PROFILES_ACTIVE: dev
   services:
      - burndown-cleardb-dev
