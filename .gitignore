@@ -3,3 +3,6 @@
 
 # Java
 /build
+
+# Gradle
+.gradle/2.13/taskArtifacts/*
