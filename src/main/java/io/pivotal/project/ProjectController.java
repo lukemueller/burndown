@@ -27,7 +27,7 @@ class ProjectController {
     ResponseEntity<Project> getProject(@PathVariable int projectId) {
         Optional<Project> project = projectService.getProjectById(projectId);
         if (!project.isPresent()) {
-            return new ResponseEntity<>(new Project(), HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
 
         return new ResponseEntity<>(project.get(), HttpStatus.OK);
