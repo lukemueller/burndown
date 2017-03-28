@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost/burndown_local
+    url: jdbc:mysql://localhost/burndown_local?serverTimezone=UTC&useSSL=false
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
