@@ -20,7 +20,7 @@ public class ProjectRepositoryTest {
 
     @Before
     public void setup() {
-        SingleConnectionDataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost:3306/burndown_test", "root", "", true);
+        SingleConnectionDataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost/burndown_test?serverTimezone=UTC&useSSL=false", "root", "", true);
         flyway = new Flyway();
         flyway.setDataSource(dataSource);
         flyway.migrate();

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -73,7 +74,7 @@ class ProjectRepository {
         return (rs, rowNum) -> new ProjectEntity(
             rs.getInt("id"),
             rs.getString("name"),
-            rs.getDate("start_date").toLocalDate(),
+            LocalDate.parse(rs.getString("start_date")),
             rs.getInt("hourly_rate"),
             rs.getInt("budget")
         );
