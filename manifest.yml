@@ -8,3 +8,4 @@ applications:
     SPRING_PROFILES_ACTIVE: dev
   services:
      - burndown-cleardb-dev
+     - burndown-sendgrid-dev
