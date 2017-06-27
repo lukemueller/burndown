@@ -47,14 +47,20 @@ public class ProjectRepositoryTest {
 
     @Test
     public void getProjectEntityById_returnsEntitySavedInDB() {
-        ProjectEntity projectEntity = new ProjectEntity("test-name", LocalDate.of(1999, 12, 31), 750, 150000);
+        LocalDate date = LocalDate.of(1999, 12, 31);
+        ProjectEntity projectEntity = ProjectEntity.builder()
+            .name("test-name")
+            .startDate(date)
+            .hourlyRate(750)
+            .budget(150000)
+            .build();
         ProjectEntity save = projectRepository.save(projectEntity);
 
         ProjectEntity savedEntity = projectRepository.getProjectEntityById(save.getId());
 
         assertThat(savedEntity.getId()).isEqualTo(1);
         assertThat(savedEntity.getName()).isEqualTo("test-name");
-        assertThat(savedEntity.getStartDate()).isEqualTo(LocalDate.of(1999, 12, 31));
+        assertThat(savedEntity.getStartDate()).isEqualTo(date);
         assertThat(savedEntity.getHourlyRate()).isEqualTo(750);
         assertThat(savedEntity.getBudget()).isEqualTo(150000);
     }
@@ -69,11 +75,12 @@ public class ProjectRepositoryTest {
 
     @Test
     public void save_returnsFullyHydratedProjectEntity() {
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setName("name-to-save");
-        projectEntity.setHourlyRate(365);
-        projectEntity.setStartDate(LocalDate.of(2018, 8, 30));
-        projectEntity.setBudget(25000);
+        ProjectEntity projectEntity = ProjectEntity.builder()
+            .name("name-to-save")
+            .hourlyRate(365)
+            .startDate(LocalDate.of(2018, 8, 30))
+            .budget(25000)
+            .build();
 
         ProjectEntity savedProjectEntity = projectRepository.save(projectEntity);
 
@@ -87,14 +94,16 @@ public class ProjectRepositoryTest {
     private ProjectEntity generateRandomEntity() {
         Random random = new Random();
 
-        return new ProjectEntity(
-            String.valueOf(random.nextInt()),
-            LocalDate.of(
-                random.nextInt(3000),
-                random.nextInt(11) + 1,
-                random.nextInt(27) + 1),
-            random.nextInt(),
-            random.nextInt()
-        );
+        LocalDate randomDate = LocalDate.of(
+            random.nextInt(3000),
+            random.nextInt(11) + 1,
+            random.nextInt(27) + 1);
+
+        return ProjectEntity.builder()
+            .name(String.valueOf(random.nextInt()))
+            .startDate(randomDate)
+            .hourlyRate(random.nextInt())
+            .budget(random.nextInt())
+            .build();
     }
 }

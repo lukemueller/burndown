@@ -227,7 +227,7 @@
         // -------------------------------------------
 
         $.ajax({
-            url: "projects/12"
+            url: "projects/4"
         }).done(function (response) {
             var burndown = response.burndown;
             var averageWeeklySpend = (response.budget - burndown[burndown.length - 1]) / burndown.length-1;
@@ -252,7 +252,7 @@
                 },
                 plotOptions: {
                     series: {
-                        pointStart: Date.UTC(2016, 10, 7),
+                        pointStart: Date.UTC(2017, 27, 3),
                         pointInterval: 7 * 24 * 3600 * 1000 // one week
                     },
                     area: {
@@ -273,9 +273,9 @@
 
                     },
                     type: 'linear',
-                    max: 697467,
+                    max: 10000,
                     min: 0,
-                    tickInterval: 10000
+                    tickInterval: 500
                 },
                 tooltip: {
                     valuePrefix: '$',

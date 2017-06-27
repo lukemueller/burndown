@@ -20,13 +20,11 @@ public class BurndownCsvParser {
     }
 
     public List<Float> getBurndownForProjectEntity(ProjectEntity projectEntity) {
-        Map<LocalDate, Float> weeklySpend = weeklySpendCalculator.getWeeklySpendForProjectEntity(projectEntity);
-
-        float originalBudget = Float.parseFloat(String.valueOf(projectEntity.getBudget()));
-
         ArrayList<Float> burndown = new ArrayList<>();
+        float originalBudget = Float.parseFloat(String.valueOf(projectEntity.getBudget()));
         burndown.add(originalBudget);
 
+        Map<LocalDate, Float> weeklySpend = weeklySpendCalculator.getWeeklySpendForProjectEntity(projectEntity);
         for (LocalDate weekStarting : weeklySpend.keySet()) {
             Float previousWeekRemainingBudget = burndown.get(burndown.size() - 1);
             burndown.add(previousWeekRemainingBudget - weeklySpend.get(weekStarting));

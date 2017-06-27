@@ -23,6 +23,8 @@ repositories {
 }
 
 dependencies {
+    compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.16.16'
+
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'

@@ -4,7 +4,7 @@ import io.pivotal.project.burndown.BurndownCsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,34 +37,42 @@ class ProjectService {
             return Optional.empty();
         }
 
-        List<Float> burndownByProjectName = burndownCsvParser.getBurndownForProjectEntity(projectEntityById);
+        List<Float> burndown = getBurndown(projectEntityById);
 
-        return Optional.of(new Project(
-            projectEntityById.getId(),
-            projectEntityById.getName(),
-            projectEntityById.getHourlyRate(),
-            projectEntityById.getStartDate(),
-            projectEntityById.getBudget(),
-            burndownByProjectName == null ? new ArrayList<>() : burndownByProjectName
-        ));
+        Project project = Project.builder()
+            .id(projectEntityById.getId())
+            .name(projectEntityById.getName())
+            .hourlyRate(projectEntityById.getHourlyRate())
+            .startDate(projectEntityById.getStartDate())
+            .budget(projectEntityById.getBudget())
+            .burndown(burndown)
+            .build();
+
+        return Optional.of(project);
+    }
+
+    private List<Float> getBurndown(ProjectEntity projectEntityById) {
+        Optional<List<Float>> maybeBurndown = Optional.ofNullable(burndownCsvParser.getBurndownForProjectEntity(projectEntityById));
+        return maybeBurndown.orElse(Collections.emptyList());
     }
 
     Project saveProject(Project project) {
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setName(project.getName());
-        projectEntity.setStartDate(project.getStartDate());
-        projectEntity.setHourlyRate(project.getHourlyRate());
-        projectEntity.setBudget(project.getBudget());
+        ProjectEntity projectEntity = ProjectEntity.builder()
+            .name(project.getName())
+            .startDate(project.getStartDate())
+            .hourlyRate(project.getHourlyRate())
+            .budget(project.getBudget())
+            .build();
 
         ProjectEntity savedProjectEntity = projectRepository.save(projectEntity);
 
-        return new Project(
-            savedProjectEntity.getId(),
-            savedProjectEntity.getName(),
-            savedProjectEntity.getHourlyRate(),
-            savedProjectEntity.getStartDate(),
-            savedProjectEntity.getBudget(),
-            new ArrayList<>()
-        );
+        return Project.builder()
+            .id(savedProjectEntity.getId())
+            .name(savedProjectEntity.getName())
+            .hourlyRate(savedProjectEntity.getHourlyRate())
+            .startDate(savedProjectEntity.getStartDate())
+            .budget(savedProjectEntity.getBudget())
+            .burndown(Collections.emptyList())
+            .build();
     }
 }
