@@ -1,5 +1,6 @@
 package io.pivotal.project;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -17,6 +18,7 @@ public class Project {
     @JsonProperty("hourly_rate")
     private int hourlyRate;
     @JsonProperty("start_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     private int budget; // TODO - should expand to List<SOW> domain objects
     private List<Float> burndown;

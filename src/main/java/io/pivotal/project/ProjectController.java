@@ -24,19 +24,22 @@ class ProjectController {
     }
 
     @GetMapping("projects/{projectId}")
-    ResponseEntity<Project> getProject(@PathVariable int projectId) {
-        Optional<Project> project = projectService.getProjectById(projectId);
-        if (!project.isPresent()) {
+    ResponseEntity<ProjectApiRequestResponseWrapper> getProject(@PathVariable int projectId) {
+        Optional<Project> maybeProject = projectService.getProjectById(projectId);
+        if (!maybeProject.isPresent()) {
             return ResponseEntity.notFound().build();
         }
 
-        return new ResponseEntity<>(project.get(), HttpStatus.OK);
+        ProjectApiRequestResponseWrapper matchedProjectApiResponse = new ProjectApiRequestResponseWrapper(maybeProject.get());
+        return new ResponseEntity<>(matchedProjectApiResponse, HttpStatus.OK);
     }
 
     @PostMapping("/projects")
-    ResponseEntity<Project> createProject(@RequestBody CreateProjectApiRequest createProjectApiRequest) {
-        Project savedProject = projectService.saveProject(createProjectApiRequest.getProject());
+    @ResponseStatus(value = HttpStatus.CREATED)
+    ResponseEntity<ProjectApiRequestResponseWrapper> createProject(@RequestBody ProjectApiRequestResponseWrapper projectApiRequestResponseWrapper) {
+        Project savedProject = projectService.saveProject(projectApiRequestResponseWrapper.getProject());
 
-        return new ResponseEntity<>(savedProject, HttpStatus.CREATED);
+        ProjectApiRequestResponseWrapper createProjectApiResponse = new ProjectApiRequestResponseWrapper(savedProject);
+        return new ResponseEntity<>(createProjectApiResponse, HttpStatus.CREATED);
     }
 }

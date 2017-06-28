@@ -1,9 +1,15 @@
 package io.pivotal.project;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @JsonRootName("Project")
-public class CreateProjectApiRequest {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProjectApiRequestResponseWrapper {
     private Project project;
 
     public Project getProject() {
@@ -16,7 +22,7 @@ public class CreateProjectApiRequest {
 
     @Override
     public String toString() {
-        return "CreateProjectApiRequest{" +
+        return "ProjectApiRequestResponseWrapper{" +
             "project=" + project +
             '}';
     }

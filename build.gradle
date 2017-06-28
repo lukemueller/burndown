@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.16.16'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.16'
 
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
@@ -33,10 +33,10 @@ dependencies {
     compile group: 'org.flywaydb', name: 'flyway-core', version: '4.1.0'
     compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
 
-
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: '2.8.6'
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.8.6'
 
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.6.2'
+    testCompile group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
 }

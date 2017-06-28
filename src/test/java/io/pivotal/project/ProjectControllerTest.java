@@ -10,7 +10,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -74,9 +73,9 @@ public class ProjectControllerTest {
         Project stubbedProject = new Project();
         when(mockProjectService.getProjectById(57)).thenReturn(Optional.of(stubbedProject));
 
-        ResponseEntity<Project> projectResponseEntity = controller.getProject(57);
+        ResponseEntity<ProjectApiRequestResponseWrapper> projectWrapper = controller.getProject(57);
 
-        assertThat(projectResponseEntity.getBody()).isSameAs(stubbedProject);
+        assertThat(projectWrapper.getBody().getProject()).isSameAs(stubbedProject);
     }
 
     @Test
@@ -143,8 +142,8 @@ public class ProjectControllerTest {
         Project stubbedProject = new Project();
         when(mockProjectService.saveProject(any())).thenReturn(stubbedProject);
 
-        ResponseEntity<Project> project = controller.createProject(new CreateProjectApiRequest());
+        ResponseEntity<ProjectApiRequestResponseWrapper> projectWrapper = controller.createProject(new ProjectApiRequestResponseWrapper());
 
-        assertThat(project.getBody()).isSameAs(stubbedProject);
+        assertThat(projectWrapper.getBody().getProject()).isSameAs(stubbedProject);
     }
 }

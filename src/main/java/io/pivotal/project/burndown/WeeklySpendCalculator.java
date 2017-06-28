@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -23,6 +24,7 @@ class WeeklySpendCalculator {
             reader = new CSVReader(new FileReader(classPathResource.getFile()));
         } catch (IOException e) {
             e.printStackTrace();
+            return Collections.emptyMap();
         }
 
         HashMap<LocalDate, Float> weeklySpendInHours = new HashMap<>();

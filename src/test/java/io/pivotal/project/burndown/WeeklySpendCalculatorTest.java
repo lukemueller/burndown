@@ -22,7 +22,7 @@ public class WeeklySpendCalculatorTest {
 
         assertThat(weeklySpend).hasSize(3);
         assertThat(weeklySpend.get(LocalDate.of(2015, 10, 26))).isEqualTo(60f);
-        assertThat(weeklySpend.get(LocalDate.of(2015, 11, 2))).isEqualTo(110f);
-        assertThat(weeklySpend.get(LocalDate.of(2015, 11, 9))).isEqualTo(60f);
+        assertThat(weeklySpend.get(LocalDate.of(2015, 11, 18))).isEqualTo(110f);
+        assertThat(weeklySpend.get(LocalDate.of(2015, 11, 25))).isEqualTo(60f);
     }
 }
