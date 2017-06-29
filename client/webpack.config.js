@@ -17,10 +17,16 @@ module.exports = {
                 ],
                 loader: 'babel-loader',
                 options: {
-                    presets: ['es2015', 'react']
+                    presets: ['es2015', 'react', 'stage-2']
                 }
             }
         ]
+    },
+    externals: {
+        cheerio: 'window',
+        'react/addons': 'react',
+        'react/lib/ExecutionEnvironment': 'react',
+        'react/lib/ReactContext': 'react',
     },
     devtool: 'source-map',
     context: __dirname,
