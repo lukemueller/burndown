@@ -1,17 +1,30 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+
+import {getProjects} from '../../api/BurndownApi';
 
 class Burndown extends Component {
     static propTypes = {
-        projects: PropTypes.array.isRequired
+        projects: PropTypes.array
     };
+
+    componentDidMount() {
+        const {dispatch} = this.props;
+        getProjects().then(response =>
+            response.json().then(projects =>
+                dispatch({type: 'GET_PROJECTS', payload: projects})
+            )
+        );
+    }
 
     render() {
         const {projects} = this.props;
-        const projectAnchors = projects.map(({name}, key) => {
+        console.log(this.props);
+        const projectAnchors = projects.map(({name, id}, key) => {
             return (
                 <div key={key}>
-                    <a href={`projects/${name}`}>{name}</a>
+                    <a href={`projects/${id}`}>{name}</a>
                 </div>
             );
         });
@@ -24,4 +37,8 @@ class Burndown extends Component {
     }
 }
 
-export default Burndown;
+const mapStateToProps = ({projects}) => {
+    return {projects: projects};
+};
+
+export default connect(mapStateToProps, null)(Burndown);

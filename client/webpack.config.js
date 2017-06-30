@@ -1,9 +1,10 @@
 /* global require, module, __dirname */
 
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
-    entry: './src/index',
+    entry: path.resolve('./src/index'),
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js'
@@ -22,23 +23,25 @@ module.exports = {
             }
         ]
     },
-    externals: {
-        cheerio: 'window',
-        'react/addons': 'react',
-        'react/lib/ExecutionEnvironment': 'react',
-        'react/lib/ReactContext': 'react',
-    },
     devtool: 'source-map',
     context: __dirname,
-    //externals: ['react'],
     devServer: {
+        port: 9000,
         proxy: {
-            '/api': 'http://localhost:3000'
+            '**': {
+                target: 'http://0.0.0.0:8080',
+                secure: false
+            }
         },
         // contentBase: path.join(__dirname, 'public'),
         historyApiFallback: true,
         hot: true,
         https: false,
         noInfo: true
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            BASE_URL: JSON.stringify('http://localhost:9000')
+        })
+    ]
 };
