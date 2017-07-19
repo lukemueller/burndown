@@ -4,3 +4,7 @@ spring:
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+flyway:
+  locations: classpath:db/migration,classpath:db/fixtures
+  clean-on-validation-error: true
