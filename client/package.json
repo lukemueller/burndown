@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.config.js",
+    "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.config.js --hot --inline",
     "build": "./node_modules/webpack/bin/webpack.js --config webpack.config.js",
     "build:watch": "./node_modules/webpack/bin/webpack.js --config webpack.config.js --watch",
     "test": "./node_modules/jest/bin/jest.js",
