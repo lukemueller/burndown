@@ -70,7 +70,7 @@ public class ProjectRepositoryTest {
 
         ProjectEntity savedEntity = projectRepository.getProjectEntityById(save.getId());
 
-        assertThat(savedEntity.getId()).isEqualTo(1);
+        assertThat(savedEntity.getId()).isGreaterThan(0);
         assertThat(savedEntity.getName()).isEqualTo("test-name");
         assertThat(savedEntity.getStartDate()).isEqualTo(date);
         assertThat(savedEntity.getHourlyRate()).isEqualTo(750);
