@@ -1,26 +1,38 @@
 package io.pivotal.project;
 
+import io.pivotal.BurndownApplication;
 import org.flywaydb.core.Flyway;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
+import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes= {BurndownApplication.class})
+@ActiveProfiles("test")
 public class ProjectRepositoryTest {
 
     private ProjectRepository projectRepository;
     private Flyway flyway;
 
+    @Autowired
+    DataSource dataSource;
+
     @Before
     public void setup() {
-        SingleConnectionDataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost/burndown_test?serverTimezone=UTC&useSSL=false", "root", "", true);
         flyway = new Flyway();
         flyway.setDataSource(dataSource);
         flyway.migrate();
