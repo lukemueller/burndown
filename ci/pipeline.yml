@@ -11,4 +11,4 @@ jobs:
     - get: source-code
       trigger: true
     - task: test
-      file: ci/tasks/test.yml
+      file: source-code/ci/tasks/test.yml
