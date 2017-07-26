@@ -3,5 +3,5 @@
 set -xe
 
 pushd source-code
-./gradlew clean test
+./gradlew clean test --stacktrace
 popd
