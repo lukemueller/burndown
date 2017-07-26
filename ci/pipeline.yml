@@ -14,7 +14,7 @@ jobs:
       file: burndown-git/ci/tasks/test.yml
   - name: push-dev
     plan:
-    - get: built-project/build/libs/burndown-1.0-SNAPSHOT.jar
-      trigger: true
+#    - get: built-project/build/libs/burndown-1.0-SNAPSHOT.jar
+#      trigger: true
     - task: push-dev
       file: burndown-git/ci/tasks/push-dev.yml
