@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -22,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@ActiveProfiles("test")
 public class ProjectControllerIntegrationTest {
 
     @Autowired
@@ -32,7 +34,7 @@ public class ProjectControllerIntegrationTest {
 
     @Test
     public void gettingProjectById_ReturnsTheProject_GivenThereExistsAMatchingProject() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(post("/projects")
+        MvcResult mvcResult = mockMvc.perform(post("/projects")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\n" +
                 "  \"project\": {\n" +
@@ -47,7 +49,8 @@ public class ProjectControllerIntegrationTest {
         Project project = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), ProjectApiRequestResponseWrapper.class).getProject();
         int projectId = project.getId();
 
-        this.mockMvc.perform(get("/projects/{projectId}", projectId))
+        mockMvc
+            .perform(get("/projects/{projectId}", projectId))
             .andExpect(jsonPath("$.project.id").value(projectId))
             .andExpect(jsonPath("$.project.name").value("ProjectControllerIntegrationTest Project"))
             .andExpect(jsonPath("$.project.start_date").value("2017-03-13"))
@@ -57,7 +60,8 @@ public class ProjectControllerIntegrationTest {
 
     @Test
     public void projectObject_serializationTest() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(post("/projects")
+        MvcResult mvcResult = mockMvc
+            .perform(post("/projects")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\n" +
                 "  \"project\": {\n" +
