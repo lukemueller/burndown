@@ -11,4 +11,4 @@ inputs:
 - name: source-code
 
 run:
-  path: my-app/scripts/test
+  path: source-code/ci/tasks/test.sh
