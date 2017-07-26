@@ -9,8 +9,6 @@ image_resource:
 
 inputs:
 - name: burndown-git
-outputs:
-- name: burndown-jar-with-dependencies
 
 run:
   path: burndown-git/ci/tasks/test.sh

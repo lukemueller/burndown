@@ -3,5 +3,5 @@
 set -xe
 
 pushd burndown-git
-./gradlew clean test build
+./gradlew clean test
 popd

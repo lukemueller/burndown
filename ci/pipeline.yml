@@ -4,17 +4,35 @@ resources:
     source:
       uri: https://github.com/lukemueller/burndown.git
       branch: concourse
+  - name: cf-deploy-dev
+    type: cf
+    source:
+      api: https://api.run.pivotal.io
+      username: lmueller@pivotal.io
+      password: PASSWORD
+      organization: luke
+      space: development
+      skip_cert_check: false
+      command_environment_variables:
+        CF_COLOR: true
+        CF_DIAL_TIMEOUT: 15
+        CF_TRACE: true
 
 jobs:
-  - name: test-and-build
-    plan:
-    - get: burndown-git
-      trigger: true
-    - task: test
-      file: burndown-git/ci/tasks/test.yml
-  - name: push-dev
-    plan:
-#    - get: built-project/build/libs/burndown-1.0-SNAPSHOT.jar
-#      trigger: true
-    - task: push-dev
-      file: burndown-git/ci/tasks/push-dev.yml
+- name: test
+  plan:
+  - get: burndown-git
+    trigger: true
+  - task: test
+    file: burndown-git/ci/tasks/test.yml
+
+- name: build
+  plan:
+  - get: burndown-git
+    trigger: true
+    passed: [test]
+  - task: build
+    file: burndown-git/ci/tasks/build.yml
+  - put: cf-deploy-dev
+    params:
+      manifest: build-output/manifest.yml
