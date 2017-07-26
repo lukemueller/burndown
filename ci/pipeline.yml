@@ -11,4 +11,4 @@ jobs:
     - get: source-code
       trigger: true
     - task: test
-      file: burndown/ci/tasks/test.yml
+      file: ci/tasks/test.yml
