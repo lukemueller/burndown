@@ -2,6 +2,6 @@
 
 set -xe
 
-pushd source-code
-./gradlew clean test --stacktrace
+pushd burndown-git
+./gradlew clean test build
 popd

@@ -1,14 +1,20 @@
 resources:
-  - name: source-code
+  - name: burndown-git
     type: git
     source:
       uri: https://github.com/lukemueller/burndown.git
       branch: concourse
 
 jobs:
-  - name: test
+  - name: test-and-build
     plan:
-    - get: source-code
+    - get: burndown-git
       trigger: true
     - task: test
-      file: source-code/ci/tasks/test.yml
+      file: burndown-git/ci/tasks/test.yml
+  - name: push-dev
+    plan:
+    - get: built-project/build/libs/burndown-1.0-SNAPSHOT.jar
+      trigger: true
+    - task: push-dev
+      file: burndown-git/ci/tasks/push-dev.yml

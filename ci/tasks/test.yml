@@ -8,7 +8,9 @@ image_resource:
     tag: '8-jdk'
 
 inputs:
-- name: source-code
+- name: burndown-git
+outputs:
+- name: burndown-jar-with-dependencies
 
 run:
-  path: source-code/ci/tasks/test.sh
+  path: burndown-git/ci/tasks/test.sh
