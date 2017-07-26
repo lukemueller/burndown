@@ -26,25 +26,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 public class ProjectControllerIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private MockMvc mockMvc;
+
     @Test
     public void gettingProjectById_ReturnsTheProject_GivenThereExistsAMatchingProject() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(post("/projects")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\n" +
-                "  \"project\": {\n" +
-                "    \"name\": \"ProjectControllerIntegrationTest Project\",\n" +
-                "    \"start_date\": \"2017-03-13\",\n" +
-                "    \"hourly_rate\": 11,\n" +
-                "    \"budget\": 1111\n" +
-                "  }\n" +
-                "}")
-        ).andReturn();
+        MvcResult mvcResult = mockMvc
+            .perform(post("/projects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                    "  \"project\": {\n" +
+                    "    \"name\": \"ProjectControllerIntegrationTest Project\",\n" +
+                    "    \"start_date\": \"2017-03-13\",\n" +
+                    "    \"hourly_rate\": 11,\n" +
+                    "    \"budget\": 1111\n" +
+                    "  }\n" +
+                    "}")
+            ).andReturn();
 
         Project project = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), ProjectApiRequestResponseWrapper.class).getProject();
         int projectId = project.getId();
@@ -62,16 +64,16 @@ public class ProjectControllerIntegrationTest {
     public void projectObject_serializationTest() throws Exception {
         MvcResult mvcResult = mockMvc
             .perform(post("/projects")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\n" +
-                "  \"project\": {\n" +
-                "    \"name\": \"Serialization Test Project\",\n" +
-                "    \"start_date\": \"2000-01-10\",\n" +
-                "    \"hourly_rate\": 50,\n" +
-                "    \"budget\": 75000\n" +
-                "  }\n" +
-                "}")
-        ).andReturn();
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                    "  \"project\": {\n" +
+                    "    \"name\": \"Serialization Test Project\",\n" +
+                    "    \"start_date\": \"2000-01-10\",\n" +
+                    "    \"hourly_rate\": 50,\n" +
+                    "    \"budget\": 75000\n" +
+                    "  }\n" +
+                    "}")
+            ).andReturn();
 
         String responseAsString = mvcResult.getResponse().getContentAsString();
 

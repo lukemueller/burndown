@@ -6,7 +6,7 @@ resources:
       branch: concourse
 
 jobs:
-  - name: build-and-test
+  - name: test
     plan:
     - get: source-code
       trigger: true
