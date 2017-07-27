@@ -7,8 +7,12 @@ import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.util.ArrayList
 
+interface BurndownParser {
+    fun getBurndownForProjectEntity(projectEntity: ProjectEntity): List<Float>
+}
+
 @Component
-class BurndownCsvParser @Autowired
+class CsvBurndownParser @Autowired
 constructor(private val weeklySpendCalculator: WeeklySpendCalculator) {
 
     fun getBurndownForProjectEntity(projectEntity: ProjectEntity): List<Float> {
@@ -19,7 +23,7 @@ constructor(private val weeklySpendCalculator: WeeklySpendCalculator) {
         val weeklySpend = weeklySpendCalculator.getWeeklySpendForProjectEntity(projectEntity)
         for (weekStarting in weeklySpend.keys) {
             val previousWeekRemainingBudget = burndown[burndown.size - 1]
-            val spendForWeek : Float = weeklySpend[weekStarting] ?: throw RuntimeException("somehow spend for $weekStarting was null")
+            val spendForWeek: Float = weeklySpend[weekStarting] ?: throw RuntimeException("somehow spend for $weekStarting was null")
             burndown.add(previousWeekRemainingBudget - spendForWeek)
         }
 

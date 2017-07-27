@@ -8,7 +8,7 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter
 open class BurndownApplicationConfiguration {
 
     @Bean
-    fun requestLoggingFilter(): CommonsRequestLoggingFilter {
+    open fun requestLoggingFilter(): CommonsRequestLoggingFilter {
         val filter = CommonsRequestLoggingFilter()
         filter.setIncludeClientInfo(true)
         filter.setIncludeQueryString(true)

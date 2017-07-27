@@ -1,16 +1,14 @@
 package io.pivotal.project
 
-import io.pivotal.project.burndown.BurndownCsvParser
+import io.pivotal.project.burndown.BurndownParser
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 import java.util.Optional
 
-import java.util.stream.Collectors.toList
-
 @Service
 internal open class ProjectService @Autowired
-constructor(private val projectRepository: ProjectRepository, private val burndownCsvParser: BurndownCsvParser) {
+constructor(private val projectRepository: ProjectRepository, private val burndownParser: BurndownParser) {
 
    fun allProjects() : List<Project> =
                 projectRepository
@@ -36,7 +34,7 @@ constructor(private val projectRepository: ProjectRepository, private val burndo
     }
 
     private fun getBurndown(projectEntityById: ProjectEntity): List<Float> {
-        val maybeBurndown = Optional.ofNullable(burndownCsvParser.getBurndownForProjectEntity(projectEntityById))
+        val maybeBurndown = Optional.ofNullable(burndownParser.getBurndownForProjectEntity(projectEntityById))
         return maybeBurndown.orElse(emptyList<Float>())
     }
 

@@ -1,6 +1,6 @@
 package io.pivotal.project
 
-import io.pivotal.project.burndown.BurndownCsvParser
+import io.pivotal.project.burndown.BurndownParser
 import io.pivotal.project.testhelpers.aProject
 import io.pivotal.project.testhelpers.aProjectEntity
 import org.junit.Test
@@ -18,8 +18,8 @@ import org.mockito.Mockito.*
 class ProjectServiceTest {
 
     private val mockProjectRepository = mock<ProjectRepository>(ProjectRepository::class.java)
-    private val mockBurndownCsvParser = Mockito.mock<BurndownCsvParser>(BurndownCsvParser::class.java)
-    private val projectService: ProjectService = ProjectService(mockProjectRepository, mockBurndownCsvParser)
+    private val mockBurndownParser = Mockito.mock<BurndownParser>(BurndownParser::class.java)
+    private val projectService: ProjectService = ProjectService(mockProjectRepository, mockBurndownParser)
 
     @Test
     fun getAllProjects_setsProjectFieldsFromRepositoryEntities() {
@@ -68,7 +68,7 @@ class ProjectServiceTest {
         `when`(mockProjectRepository.getProjectEntityById(100)).thenReturn(stubbedProjectEntity)
 
         val stubbedBurndown = ArrayList<Float>()
-        `when`(mockBurndownCsvParser.getBurndownForProjectEntity(stubbedProjectEntity)).thenReturn(stubbedBurndown)
+        `when`(mockBurndownParser.getBurndownForProjectEntity(stubbedProjectEntity)).thenReturn(stubbedBurndown)
 
         val project = projectService.getProjectById(100)
 
@@ -78,7 +78,7 @@ class ProjectServiceTest {
     @Test
     fun getProjectById_defaultsBurndownToAnEmptyList() {
         `when`(mockProjectRepository.getProjectEntityById(anyInt())).thenReturn(aProjectEntity())
-        `when`(mockBurndownCsvParser.getBurndownForProjectEntity(any<ProjectEntity>(ProjectEntity::class.java))).thenReturn(null)
+        `when`(mockBurndownParser.getBurndownForProjectEntity(any<ProjectEntity>(ProjectEntity::class.java))).thenReturn(null)
 
         val project = projectService.getProjectById(Random().nextInt())
 

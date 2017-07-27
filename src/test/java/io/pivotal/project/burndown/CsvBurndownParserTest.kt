@@ -8,7 +8,7 @@ import org.mockito.Mockito.mock
 import java.time.LocalDate
 import java.util.*
 
-class BurndownCsvParserTest {
+class CsvBurndownParserTest {
 
     @Test
     fun getBurndownForProjectEntity_subtractsWeeklyBurnFromWeeklyBurn() {
@@ -26,7 +26,7 @@ class BurndownCsvParserTest {
                 mockWeeklySpendCalculator.getWeeklySpendForProjectEntity(project)
         ).thenReturn(stubbedWeeklySpendMap)
 
-        val parser = BurndownCsvParser(mockWeeklySpendCalculator)
+        val parser = CsvBurndownParser(mockWeeklySpendCalculator)
         val burndown = parser.getBurndownForProjectEntity(project)
 
         assertThat(burndown).containsExactly(300f, 250f, 150f)

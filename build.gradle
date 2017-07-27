@@ -25,6 +25,9 @@ apply plugin: 'org.springframework.boot'
 allOpen {
     annotation("org.springframework.stereotype.Service")
     annotation("org.springframework.stereotype.Component")
+    annotation("org.springframework.transaction.annotation.Transactional")
+    annotation("org.springframework.transaction.annotation.SpringBootApplication")
+    annotation("org.springframework.context.annotation.Configuration")
 }
 
 //noinspection GroovyUnusedAssignment

@@ -57,7 +57,6 @@ class ProjectControllerIntegrationTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun projectObject_serializationTest() {
         val mvcResult = this.mockMvc!!.perform(post("/projects")
                 .contentType(MediaType.APPLICATION_JSON)
