@@ -13,7 +13,7 @@ interface WeeklySpendCalculator {
     fun getWeeklySpendForProjectEntity(projectEntity: ProjectEntity): Map<LocalDate, Float>
 }
 
-@Component class CsvWeeklySpendCalculator : WeeklySpendCalculator {
+@Component open class CsvWeeklySpendCalculator : WeeklySpendCalculator {
 
     override fun getWeeklySpendForProjectEntity(projectEntity: ProjectEntity): Map<LocalDate, Float> {
 

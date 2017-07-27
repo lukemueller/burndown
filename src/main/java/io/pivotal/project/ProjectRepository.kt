@@ -5,21 +5,24 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Component
-
-import javax.sql.DataSource
 import java.sql.Date
 import java.sql.ResultSet
 import java.time.LocalDate
+import javax.sql.DataSource
 
-import java.util.stream.Collectors.toList
+interface ProjectRepository {
+    fun allProjectEntities() : List<ProjectEntity>
+    fun getProjectEntityById(projectId: Int): ProjectEntity?
+    fun save(projectEntity: ProjectEntity): ProjectEntity
+}
 
 @Component
-internal class ProjectRepository @Autowired
-constructor(dataSource: DataSource) {
+internal open class SQLProjectRepository @Autowired
+constructor(dataSource: DataSource) : ProjectRepository {
 
     private val jdbcTemplate: JdbcTemplate = JdbcTemplate(dataSource)
 
-    fun allProjectEntities() : List<ProjectEntity> =
+    override fun allProjectEntities() : List<ProjectEntity> =
         jdbcTemplate.queryForList(
                 "SELECT * FROM projects"
         ).toList()
@@ -33,7 +36,7 @@ constructor(dataSource: DataSource) {
                     )
                 })
 
-    fun getProjectEntityById(projectId: Int): ProjectEntity? {
+    override fun getProjectEntityById(projectId: Int): ProjectEntity? {
         try {
             return jdbcTemplate.queryForObject(
                     "SELECT * FROM projects WHERE id = ?",
@@ -46,7 +49,7 @@ constructor(dataSource: DataSource) {
 
     }
 
-    fun save(projectEntity: ProjectEntity): ProjectEntity {
+    override fun save(projectEntity: ProjectEntity): ProjectEntity {
         jdbcTemplate.update(
                 "INSERT INTO projects (name, start_date, hourly_rate, budget) VALUES (?, ?, ?, ?);",
                 projectEntity.name,

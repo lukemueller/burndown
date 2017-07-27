@@ -12,10 +12,10 @@ import java.util.Random
 import org.assertj.core.api.Java6Assertions.assertThat
 
 
-class ProjectRepositoryTest {
+class SQLProjectRepositoryTest {
 
     val dataSource = SingleConnectionDataSource("jdbc:mysql://localhost/burndown_test?serverTimezone=UTC&useSSL=false", "root", "", true)
-    private val projectRepository: ProjectRepository = ProjectRepository(dataSource)
+    private val projectRepository: ProjectRepository = SQLProjectRepository(dataSource)
     private val flyway: Flyway = Flyway()
 
     @Before

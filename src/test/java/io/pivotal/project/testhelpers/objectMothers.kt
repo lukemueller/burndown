@@ -13,6 +13,22 @@ fun aProject(): Project {
             startDate = LocalDate.of(2012, 9, 22)
     )
 }
+fun aProjectWith(id: Int = 1,
+                 name: String = "Cool health insurance app",
+                 hourlyRate: Int = 250,
+                 budget: Int = 600000,
+                 startDate: LocalDate = LocalDate.of(2012, 9, 22),
+                 burndown : List<Float> = listOf<Float>()
+): Project {
+    return Project(id = id,
+            name = name,
+            hourlyRate = hourlyRate,
+            budget = budget,
+            burndown = burndown,
+            startDate = startDate
+    )
+}
+
 
 fun aProjectEntityWith(id: Int = 1,
                        name: String = "Cool health insurance app",
