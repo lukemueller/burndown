@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
 import {getProjects} from '../../api/BurndownApi';
+import Chart from "../Chart/Chart";
 
 class Burndown extends Component {
     static propTypes = {
@@ -20,6 +21,7 @@ class Burndown extends Component {
 
     render() {
         const {projects} = this.props;
+        const projectChart = <Chart project={projects[0]}/>
         const projectAnchors = projects.map(({name, id}, key) => {
             return (
                 <div key={key}>
@@ -29,8 +31,10 @@ class Burndown extends Component {
         });
 
         return (
-            <div className="burndown">Burndown
+            <div className="burndown">
+                Burndown
                 {projectAnchors}
+                {projectChart}
             </div>
         );
     }

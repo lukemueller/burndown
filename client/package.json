@@ -40,6 +40,7 @@
     "react-redux": "^5.0.5",
     "redux": "^3.7.1",
     "redux-thunk": "^2.2.0",
+    "victory": "^0.21.5",
     "whatwg-fetch": "^2.0.3"
   }
 }
