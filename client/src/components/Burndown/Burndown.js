@@ -20,7 +20,6 @@ class Burndown extends Component {
 
     render() {
         const {projects} = this.props;
-        console.log(this.props);
         const projectAnchors = projects.map(({name, id}, key) => {
             return (
                 <div key={key}>
