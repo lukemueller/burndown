@@ -2,30 +2,42 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-import {getProjects} from '../../api/BurndownApi';
+import {getProjects, getProject} from '../../api/BurndownApi';
 import Chart from "../Chart/Chart";
+import {GET_PROJECTS} from "../../reducers/ProjectsReducer";
+import {GET_PROJECT} from "../../reducers/ProjectReducer";
+
 
 class Burndown extends Component {
     static propTypes = {
-        projects: PropTypes.array
+        projects: PropTypes.array,
+        project: PropTypes.object
     };
+
+    constructor(props){
+        super(props);
+
+        this.state = {selectedProjectId: null};
+
+        this.getSelectedProject = this.getSelectedProject.bind(this);
+    }
 
     componentDidMount() {
         const {dispatch} = this.props;
         getProjects().then(response =>
             response.json().then(projects =>
-                dispatch({type: 'GET_PROJECTS', payload: projects})
+                dispatch({type: GET_PROJECTS, payload: projects})
             )
         );
     }
 
     render() {
         const {projects} = this.props;
-        const projectChart = <Chart project={projects[0]}/>
-        const projectAnchors = projects.map(({name, id}, key) => {
+        const projectChart = <Chart project={this.props.project}/>;
+        const projectSelectors = projects.map(({name, id}, key) => {
             return (
                 <div key={key}>
-                    <a href={`projects/${id}`}>{name}</a>
+                    <button id={id} onClick={this.getSelectedProject}>{name}</button>
                 </div>
             );
         });
@@ -33,15 +45,25 @@ class Burndown extends Component {
         return (
             <div className="burndown">
                 Burndown
-                {projectAnchors}
+                {projectSelectors}
                 {projectChart}
             </div>
         );
     }
+
+    getSelectedProject(event){
+        event.preventDefault();
+        const {dispatch} = this.props;
+        getProject(event.target.id).then(response =>
+            response.json().then(projects =>
+                dispatch({type: GET_PROJECT, payload: projects})
+            )
+        );
+    };
 }
 
-const mapStateToProps = ({projects}) => {
-    return {projects: projects};
+const mapStateToProps = ({projects, project}) => {
+    return {projects, project};
 };
 
 export default connect(mapStateToProps, null)(Burndown);

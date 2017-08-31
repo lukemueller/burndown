@@ -21,9 +21,7 @@ describe('Chart Component', () => {
         const data = chart.nodes[0].data;
 
         expect(data.HISTORICAL[0].y).toEqual(project.budget);
-        expect(data.HISTORICAL[data.HISTORICAL.length-1]).toEqual(data.PROJECTED[0]);
-        expect(data.PROJECTED[data.PROJECTED.length-1].y).not.toBeGreaterThan(project.hourly_rate * 6 * 8);
-
+        expect(data.HISTORICAL[data.HISTORICAL.length-1].y).toEqual(400000);
     });
 });
 

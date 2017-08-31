@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from "react";
-import {VictoryAxis, VictoryChart, VictoryLine} from "victory";
+import {VictoryAxis, VictoryChart, VictoryLine, VictoryTheme} from "victory";
 import PropTypes from 'prop-types';
 
 const PROJECTED = "PROJECTED";
@@ -45,80 +45,72 @@ class Chart extends Component{
         this.data[HISTORICAL]= [];
     }
 
-    formatData(){
+    formatData() {
         let data = this.data;
         let project = Object.assign({}, this.props.project);
         let date = new Date(this.props.project.start_date);
 
-        //Canned data - remove when real burndown api works
-        project.burndown = [
-            project.budget,
-            project.budget - (project.hourly_rate * 8 * 5 * 6 * .4),
-            project.budget - (project.hourly_rate * 8 * 5 * 6 * 1.9),
-            project.budget - (project.hourly_rate * 8 * 5 * 6 * 2.5),
-            project.budget - (project.hourly_rate * 8 * 5 * 6 * 3.4)
-        ];
-
-        project.burndown.map(dataItem =>{
+        project.burndown.map(dataItem => {
             data[HISTORICAL].push({x: new Date(date), y: dataItem});
             date.setDate(date.getDate() + 7);
         });
 
-        if(data[HISTORICAL].length === 0) {
-            data[HISTORICAL].push({x: new Date(date), y: project.budget})
-        }else{
-            date.setDate(date.getDate() - 7);
-        }
 
         project.budget = data[HISTORICAL][data[HISTORICAL].length - 1].y;
-        data[PROJECTED].unshift(data[HISTORICAL][data[HISTORICAL].length - 1]);
-
-        this.buildOutData(project, PROJECTED, date, this.state.numberOfPeople * project.hourly_rate * 8 * 5);
-        this.buildOutData(project, PROJECTED, date, 0, 7);
 
         this.ticks.push(data[HISTORICAL][data[HISTORICAL].length - 1].x);
         this.ticks.push(data[HISTORICAL][0].x);
-        this.ticks.push(data[PROJECTED][data[PROJECTED].length -1].x);
+    }
+
+    getDateWeeksLater(date, weeks){
+        let newDate = new Date(date);
+        return newDate.setDate(date.getDate() + 7*weeks);
     }
 
 
-    buildOutData(project, key, date, threshold=0, divisor = 1){
-        while(project.budget > threshold){
-            this.data[key].push({x: new Date(date), y: project.budget});
-            project.budget -= this.state.numberOfPeople * project.hourly_rate * 8 * 5 /divisor;
-            date.setDate(date.getDate() + 7/divisor);
-        }
-    }
 
     renderProject(){
         this.setDefaultData();
         this.formatData();
 
+
+        let xAxisStartDate = new Date(this.props.project.start_date);
+
+        let xAxisEndDate = new Date(xAxisStartDate);
+        xAxisEndDate = xAxisEndDate.setDate(xAxisEndDate.getDate() + 7*8);
+
+
         return (
-            <VictoryChart padding={{left: 60, top: 0, bottom: 60, right: 60}}  >
+            <VictoryChart padding={{left: 60, top: 15, bottom: 60, right: 60}}  >
                 <VictoryAxis
-                    label="Time Remaining"
+                    label="Date"
                     scale={{x:"time"}}
                     tickValues={this.ticks}
+                    domain={[xAxisStartDate, xAxisEndDate]}
                     tickFormat={(t) => t.toLocaleDateString('en-us', {year: 'numeric', month: 'short', day: 'numeric' })}
-                    style={{
-                        axis: {stroke: "#756f6a"},
-                        axisLabel: {fontSize: 20, padding: 30},
-                        grid: {stroke: (t) => t > 0.5 ? "red" : "grey"},
-                        ticks: {stroke: "grey", size: 5},
-                        tickLabels: {fontSize: 8, padding: 5},
-                    }}/>
+                     style={{
+                         axis: {stroke: "#756f6a"},
+                         axisLabel: {fontSize: 15, padding: 30},
+                         grid: {stroke: "red"},
+                         ticks: {stroke: "grey", size: 5},
+                         tickLabels: {fontSize: 8, padding: 5},
+                     }}
+                    />
+
+                <VictoryAxis dependentAxis
+                             domain={[0, this.props.project.budget]}
+                             theme={VictoryTheme.material}
+                             standalone={false}
+                />
                 <VictoryLine style={{data: { stroke: "red" }, parent: { border: "1px solid #red"}}} data={this.data[HISTORICAL]}/>
-                <VictoryLine style={{data: { stroke: "blue" }, parent: { border: "1px solid #blue"}}} data={this.data[PROJECTED]}/>
             </VictoryChart>
         )
     }
 
     render() {
-        if(this.props.project && this.props.project.burndown) {
-
+        if(this.props.project !== undefined && this.props.project.burndown !== undefined) {
             return(
-                <div className="burndown-chart">
+            <div className="burndown-chart">
                 <h1>
                     {this.props.project.name}
                 </h1>
@@ -139,7 +131,7 @@ class Chart extends Component{
         }else{
             return(
                 <div>
-                    <p>no project selected</p>
+                    <p>No Project Selected</p>
                 </div>
             )
         }
