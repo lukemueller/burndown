@@ -1,14 +1,9 @@
-/**
- * Created by devondapuzzo on 8/30/17.
- */
-
 import React, {Component} from "react";
 import {VictoryAxis, VictoryChart, VictoryLine, VictoryTheme} from "victory";
 import PropTypes from 'prop-types';
 
 const PROJECTED = "PROJECTED";
 const HISTORICAL = "HISTORICAL";
-
 
 class Chart extends Component{
     static propTypes = {
@@ -55,9 +50,6 @@ class Chart extends Component{
             date.setDate(date.getDate() + 7);
         });
 
-
-        project.budget = data[HISTORICAL][data[HISTORICAL].length - 1].y;
-
         this.ticks.push(data[HISTORICAL][data[HISTORICAL].length - 1].x);
         this.ticks.push(data[HISTORICAL][0].x);
     }
@@ -73,7 +65,6 @@ class Chart extends Component{
         this.setDefaultData();
         this.formatData();
 
-
         let xAxisStartDate = new Date(this.props.project.start_date);
 
         let xAxisEndDate = new Date(xAxisStartDate);
@@ -81,7 +72,7 @@ class Chart extends Component{
 
 
         return (
-            <VictoryChart padding={{left: 60, top: 15, bottom: 60, right: 60}}  >
+            <VictoryChart padding={{left: 70, top: 15, bottom: 60, right: 60}}  >
                 <VictoryAxis
                     label="Date"
                     scale={{x:"time"}}
@@ -98,9 +89,18 @@ class Chart extends Component{
                     />
 
                 <VictoryAxis dependentAxis
-                             domain={[0, this.props.project.budget]}
-                             theme={VictoryTheme.material}
-                             standalone={false}
+                     domain={[0, this.props.project.budget]}
+                     theme={VictoryTheme.material}
+                     standalone={false}
+                     label="Money Remaining"
+                     tickFormat={(t) =>`$${t.toLocaleString()}`}
+                     style={{
+                         axis: {stroke: "#756f6a"},
+                         axisLabel: {fontSize: 15, padding: 50},
+                         tickLabels: {fontSize: 8, padding: 5},
+                         grid: {stroke: "grey"},
+                     }}
+
                 />
                 <VictoryLine style={{data: { stroke: "red" }, parent: { border: "1px solid #red"}}} data={this.data[HISTORICAL]}/>
             </VictoryChart>
@@ -110,23 +110,17 @@ class Chart extends Component{
     render() {
         if(this.props.project !== undefined && this.props.project.burndown !== undefined) {
             return(
-            <div className="burndown-chart">
-                <h1>
-                    {this.props.project.name}
-                </h1>
-                <div>
-                    <h2>
-                        Number of people: {this.state.numberOfPeople}
-                    </h2>
-                    <button onClick={this.decrementStaff}>
-                        -
-                    </button>
-                    <button onClick={this.incrementStaff}>
-                        +
-                    </button>
+                <div className="burndown-chart">
+                    <h1>
+                        {this.props.project.name}
+                    </h1>
+                    <div>
+                        <h2>Number of people: {this.state.numberOfPeople}</h2>
+                        <button onClick={this.decrementStaff}>-</button>
+                        <button onClick={this.incrementStaff}>+</button>
+                    </div>
+                    {this.renderProject()}
                 </div>
-                {this.renderProject()}
-            </div>
             )
         }else{
             return(

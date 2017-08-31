@@ -1,6 +1,5 @@
 import React from 'react';
-import {mount, shallow} from 'enzyme';
-import * as V from 'victory';
+import {mount} from 'enzyme';
 
 import Chart from '../Chart';
 
@@ -22,6 +21,7 @@ describe('Chart Component', () => {
 
         expect(data.HISTORICAL[0].y).toEqual(project.budget);
         expect(data.HISTORICAL[data.HISTORICAL.length-1].y).toEqual(400000);
+        expect(data.HISTORICAL.length).toEqual(project.burndown.length);
     });
 });
 

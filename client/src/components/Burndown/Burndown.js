@@ -32,8 +32,9 @@ class Burndown extends Component {
     }
 
     render() {
-        const {projects} = this.props;
-        const projectChart = <Chart project={this.props.project}/>;
+        const {projects, project} = this.props;
+
+        const projectChart = <Chart project={project}/>;
         const projectSelectors = projects.map(({name, id}, key) => {
             return (
                 <div key={key}>
@@ -54,6 +55,7 @@ class Burndown extends Component {
     getSelectedProject(event){
         event.preventDefault();
         const {dispatch} = this.props;
+
         getProject(event.target.id).then(response =>
             response.json().then(projects =>
                 dispatch({type: GET_PROJECT, payload: projects})
