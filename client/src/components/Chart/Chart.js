@@ -43,11 +43,9 @@ class Chart extends Component{
     formatData() {
         let data = this.data;
         let project = Object.assign({}, this.props.project);
-        let date = new Date(this.props.project.start_date);
 
         project.burndown.map(dataItem => {
-            data[HISTORICAL].push({x: new Date(date), y: dataItem});
-            date.setDate(date.getDate() + 7);
+            data[HISTORICAL].push({x: new Date(dataItem.date), y: dataItem.budgetRemaining});
         });
 
         this.ticks.push(data[HISTORICAL][data[HISTORICAL].length - 1].x);

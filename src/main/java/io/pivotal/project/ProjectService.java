@@ -1,6 +1,7 @@
 package io.pivotal.project;
 
 import io.pivotal.project.burndown.BurndownCsvParser;
+import io.pivotal.project.burndown.BurndownEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ class ProjectService {
             return Optional.empty();
         }
 
-        List<Float> burndown = getBurndown(projectEntityById);
+        List<BurndownEntity> burndown = getBurndown(projectEntityById);
 
         Project project = Project.builder()
             .id(projectEntityById.getId())
@@ -51,8 +52,8 @@ class ProjectService {
         return Optional.of(project);
     }
 
-    private List<Float> getBurndown(ProjectEntity projectEntityById) {
-        Optional<List<Float>> maybeBurndown = Optional.ofNullable(burndownCsvParser.getBurndownForProjectEntity(projectEntityById));
+    private List<BurndownEntity> getBurndown(ProjectEntity projectEntityById) {
+        Optional<List<BurndownEntity>> maybeBurndown = Optional.ofNullable(burndownCsvParser.getBurndownForProjectEntity(projectEntityById));
         return maybeBurndown.orElse(Collections.emptyList());
     }
 

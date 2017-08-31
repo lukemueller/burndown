@@ -2,6 +2,7 @@ package io.pivotal.project;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.pivotal.project.burndown.BurndownEntity;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -21,7 +22,7 @@ public class Project {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     private int budget; // TODO - should expand to List<SOW> domain objects
-    private List<Float> burndown;
+    private List<BurndownEntity> burndown;
 
     public Project(ProjectEntity projectEntity) {
         this.id = projectEntity.getId();
