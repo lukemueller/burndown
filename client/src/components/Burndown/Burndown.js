@@ -37,16 +37,20 @@ class Burndown extends Component {
         const projectChart = <Chart project={project}/>;
         const projectSelectors = projects.map(({name, id}, key) => {
             return (
-                <div key={key}>
-                    <button id={id} onClick={this.getSelectedProject}>{name}</button>
-                </div>
+                <span key={key}>
+                    <button className="btn btn-primary" id={id} onClick={this.getSelectedProject}>{name}</button>
+                </span>
             );
         });
 
         return (
             <div className="burndown">
-                Burndown
-                {projectSelectors}
+                <h2>
+                    Burndown
+                </h2>
+                <div>
+                    {projectSelectors}
+                </div>
                 {projectChart}
             </div>
         );

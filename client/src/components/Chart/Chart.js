@@ -57,8 +57,6 @@ class Chart extends Component{
         return newDate.setDate(date.getDate() + 7*weeks);
     }
 
-
-
     renderProject(){
         this.setDefaultData();
         this.formatData();
@@ -114,8 +112,8 @@ class Chart extends Component{
                     </h1>
                     <div>
                         <h2>Number of people: {this.state.numberOfPeople}</h2>
-                        <button onClick={this.decrementStaff}>-</button>
-                        <button onClick={this.incrementStaff}>+</button>
+                        <button className="btn btn-light" onClick={this.decrementStaff}>-</button>
+                        <button className="btn btn-light" onClick={this.incrementStaff}>+</button>
                     </div>
                     {this.renderProject()}
                 </div>
