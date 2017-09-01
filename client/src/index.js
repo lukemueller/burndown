@@ -2,13 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware} from 'redux';
-
-import thunk from 'redux-thunk';
+import ReduxPromise from 'redux-promise';
 
 import reducer from './reducers';
 import Burndown from './components/Burndown/Burndown';
 
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 
 ReactDOM.render(
     <Provider store={createStoreWithMiddleware(reducer)}>

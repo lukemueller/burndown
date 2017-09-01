@@ -1,17 +1,13 @@
 /**
  * Created by devondapuzzo on 8/31/17.
  */
-const GET_PROJECT = "GET_PROJECT";
+import {GET_PROJECT} from "../actions/getProjectAction";
 
-let projectReducer = function projects(state = {}, action) {
+export default function projectReducer(state = {}, action) {
     switch (action.type) {
         case GET_PROJECT:
-            return action.payload.project
+            return action.payload.data.project
     }
     return state;
 };
 
-export {
-    GET_PROJECT,
-    projectReducer
-}

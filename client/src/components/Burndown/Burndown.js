@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import _ from "lodash";
 
-import {getProjects, getProject} from '../../api/BurndownApi';
 import Chart from "../Chart/Chart";
-import {GET_PROJECTS} from "../../reducers/ProjectsReducer";
-import {GET_PROJECT} from "../../reducers/ProjectReducer";
+import {getProjectAction} from "../../actions/getProjectAction";
+import {bindActionCreators} from "redux";
+import {getProjectsAction} from "../../actions/getProjectsAction";
 
 
 class Burndown extends Component {
@@ -24,12 +24,7 @@ class Burndown extends Component {
     }
 
     componentDidMount() {
-        const {dispatch} = this.props;
-        getProjects().then(response =>
-            response.json().then(projects =>
-                dispatch({type: GET_PROJECTS, payload: projects})
-            )
-        );
+        this.props.getProjectsAction();
     }
 
     render() {
@@ -76,13 +71,7 @@ class Burndown extends Component {
     };
 
     fetchProject(projectId, numberOfEmployees=-1){
-        const {dispatch} = this.props;
-
-        getProject(projectId, numberOfEmployees).then(response =>
-            response.json().then(project =>
-                dispatch({type: GET_PROJECT, payload: project})
-            )
-        );
+        this.props.getProjectAction(projectId, numberOfEmployees);
     }
 
     incrementNumberOfEmployees(){
@@ -100,4 +89,8 @@ const mapStateToProps = ({projects, project}) => {
     return {projects, project};
 };
 
-export default connect(mapStateToProps, null)(Burndown);
+const mapDispatchToProps = (dispatch) =>{
+    return bindActionCreators({getProjectAction, getProjectsAction}, dispatch)
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Burndown);
