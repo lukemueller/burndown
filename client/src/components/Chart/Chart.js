@@ -53,7 +53,7 @@ class Chart extends Component{
         let xAxisEndDate = new Date(this.props.project.projected_end_date);
 
         return (
-            <VictoryChart theme={VictoryTheme.material} height="400" width="600"
+            <VictoryChart theme={VictoryTheme.material} height={400} width={600}
                           padding={{left: 70, right:50, top:10, bottom: 50}}>
                 <VictoryAxis
                     scale={{x:"time"}}
@@ -73,14 +73,6 @@ class Chart extends Component{
         if(this.props.project !== undefined && this.props.project.burndown !== undefined) {
             return(
                 <div className="burndown-chart">
-                    <h1>
-                        {this.props.project.name}
-                    </h1>
-                    <div>
-                        <h2>Number of people: {this.props.project.number_of_employees}</h2>
-                        <button className="btn btn-light" onClick={this.decrementStaff}>-</button>
-                        <button className="btn btn-light" onClick={this.incrementStaff}>+</button>
-                    </div>
                     {this.renderProject()}
                 </div>
             )

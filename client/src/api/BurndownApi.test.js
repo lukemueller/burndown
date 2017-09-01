@@ -39,4 +39,21 @@ describe('BurndownApi', () => {
             expect(getProjectsPromise).toBeInstanceOf(Promise);
         });
     });
+
+    describe('#getProject with parameters', () => {
+        let fetchSpy;
+        let getProjectsPromise;
+        beforeEach(() => {
+            fetchSpy = jest.spyOn(window, 'fetch');
+            getProjectsPromise = getProject(1, 5);
+        });
+
+        it('fires a GET at the `/project/{project-id}?numberOfEmployees={numberOfEmployees}` endpoint', function () {
+            expect(fetchSpy).toHaveBeenCalledWith('http://localhost:8080/projects/1?numberOfEmployees=5', { method: 'GET'});
+        });
+
+        it('returns a promise', () => {
+            expect(getProjectsPromise).toBeInstanceOf(Promise);
+        });
+    });
 });

@@ -5,7 +5,7 @@ import Chart from '../Chart';
 
 
 describe('Chart Component', () => {
-    it('creates a data with the historical burndown data and projects the data until the end', () => {
+    it('creates a data array with the historical burndown data and projects the data until the end', () => {
         const project = {
             "id": 1,
             "name": "Kitten Mittens",
@@ -25,9 +25,6 @@ describe('Chart Component', () => {
         const wrapper = mount(<Chart project={project} />);
         const chart = wrapper.find(Chart);
         const {burndown, projection} = chart.nodes[0];
-
-        console.log(burndown);
-        console.log(projection);
 
         expect(burndown[0].y).toEqual(project.budget);
         expect(burndown[burndown.length-1].y).toEqual(400000);

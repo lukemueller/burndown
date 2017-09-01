@@ -22,7 +22,6 @@ public class BurndownProjectionModel {
 
         Integer weeksLeft = (int) remainingBudget.getBudgetRemaining()/ costPerWeek;
         Integer daysLeft = (int) (remainingBudget.getBudgetRemaining() % costPerWeek) / costPerDay;
-        Integer cashLeft = (int) (remainingBudget.getBudgetRemaining() - costPerDay*daysLeft - costPerWeek*weeksLeft);
 
         LocalDate projectedEndDate = remainingBudget.getDate();
         projectedEndDate = projectedEndDate.plusWeeks(weeksLeft);

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import _ from "lodash";
 
 import {getProjects, getProject} from '../../api/BurndownApi';
 import Chart from "../Chart/Chart";
@@ -17,9 +18,9 @@ class Burndown extends Component {
     constructor(props){
         super(props);
 
-        this.state = {selectedProjectId: null};
-
-        this.getSelectedProject = this.getSelectedProject.bind(this);
+        this.switchProject = this.switchProject.bind(this);
+        this.incrementNumberOfEmployees = this.incrementNumberOfEmployees.bind(this);
+        this.decrementNumberOfEmployees = this.decrementNumberOfEmployees.bind(this);
     }
 
     componentDidMount() {
@@ -38,34 +39,61 @@ class Burndown extends Component {
         const projectSelectors = projects.map(({name, id}, key) => {
             return (
                 <span key={key}>
-                    <button className="btn btn-primary" id={id} onClick={this.getSelectedProject}>{name}</button>
+                    <button className="btn btn-primary" id={id} onClick={this.switchProject}>{name}</button>
                 </span>
             );
         });
+        const projectControls = this.renderProjectControls();
 
         return (
             <div className="burndown">
-                <h2>
-                    Burndown
-                </h2>
-                <div>
-                    {projectSelectors}
-                </div>
+                <h2>Burndown</h2>
+                {projectSelectors}
+                {projectControls}
                 {projectChart}
             </div>
         );
     }
 
-    getSelectedProject(event){
+    renderProjectControls() {
+        if(!_.isEmpty(this.props.project)){
+            return (
+                <div>
+                    <h3>{this.props.project.name}</h3>
+                    <div>
+                        <h4>Number of people: {this.props.project.number_of_employees}</h4>
+                        <button className="btn btn-light" onClick={this.decrementNumberOfEmployees}>-</button>
+                        <button className="btn btn-light" onClick={this.incrementNumberOfEmployees}>+</button>
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    switchProject(event){
         event.preventDefault();
+        this.fetchProject(event.target.id);
+    };
+
+    fetchProject(projectId, numberOfEmployees=-1){
         const {dispatch} = this.props;
 
-        getProject(event.target.id).then(response =>
-            response.json().then(projects =>
-                dispatch({type: GET_PROJECT, payload: projects})
+        getProject(projectId, numberOfEmployees).then(response =>
+            response.json().then(project =>
+                dispatch({type: GET_PROJECT, payload: project})
             )
         );
-    };
+    }
+
+    incrementNumberOfEmployees(){
+        this.fetchProject(this.props.project.id, this.props.project.number_of_employees + 1)
+    }
+
+    decrementNumberOfEmployees(){
+        if(this.props.project.number_of_employees > 1){
+            this.fetchProject(this.props.project.id, this.props.project.number_of_employees - 1)
+        }
+    }
 }
 
 const mapStateToProps = ({projects, project}) => {
