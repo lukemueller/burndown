@@ -1,8 +1,10 @@
-export function projects(state = [], action) {
+import {GET_PROJECTS} from "../actions/getProjectsAction";
+
+export default function projectsReducer(state = [], action) {
     switch (action.type) {
-        case 'GET_PROJECTS':
-            console.log(action.payload);
-            return action.payload
+        case GET_PROJECTS:
+            return action.payload.data
     }
     return state;
-}
+};
+

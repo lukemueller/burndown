@@ -1,6 +1,8 @@
 package io.pivotal.project;
 
 import io.pivotal.project.burndown.BurndownCsvParser;
+import io.pivotal.project.burndown.BurndownPeriod;
+import io.pivotal.project.burndown.BurndownProjectionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,13 @@ class ProjectService {
             return Optional.empty();
         }
 
-        List<Float> burndown = getBurndown(projectEntityById);
+        List<BurndownPeriod> burndown = getBurndown(projectEntityById);
+
+        Integer numberOfEmployees =
+                (burndown.size() > 0) ?
+                burndown.get(burndown.size()-1).getNumberOfEmployees():
+                Project.DEFAULT_NUMBER_OF_EMPLOYEES;
+
 
         Project project = Project.builder()
             .id(projectEntityById.getId())
@@ -46,13 +54,14 @@ class ProjectService {
             .startDate(projectEntityById.getStartDate())
             .budget(projectEntityById.getBudget())
             .burndown(burndown)
+            .numberOfEmployees(numberOfEmployees)
             .build();
 
         return Optional.of(project);
     }
 
-    private List<Float> getBurndown(ProjectEntity projectEntityById) {
-        Optional<List<Float>> maybeBurndown = Optional.ofNullable(burndownCsvParser.getBurndownForProjectEntity(projectEntityById));
+    private List<BurndownPeriod> getBurndown(ProjectEntity projectEntityById) {
+        Optional<List<BurndownPeriod>> maybeBurndown = Optional.ofNullable(burndownCsvParser.getBurndownForProjectEntity(projectEntityById));
         return maybeBurndown.orElse(Collections.emptyList());
     }
 
@@ -74,5 +83,12 @@ class ProjectService {
             .budget(savedProjectEntity.getBudget())
             .burndown(Collections.emptyList())
             .build();
+    }
+
+    public void buildProjection(Project project, Integer numberOfEmployees) {
+        if(numberOfEmployees > 0){
+            project.setNumberOfEmployees(numberOfEmployees);
+        }
+        BurndownProjectionModel.buildOut(project);
     }
 }

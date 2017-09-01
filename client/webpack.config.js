@@ -41,7 +41,7 @@ module.exports = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            BASE_URL: JSON.stringify('http://localhost:9000')
+            BASE_URL: JSON.stringify('http://localhost:8080')
         })
     ]
 };

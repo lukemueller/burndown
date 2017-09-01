@@ -1,6 +1,7 @@
 package io.pivotal.project;
 
 import io.pivotal.project.burndown.BurndownCsvParser;
+import io.pivotal.project.burndown.BurndownPeriod;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -74,7 +75,7 @@ public class ProjectServiceTest {
         ProjectEntity stubbedProjectEntity = new ProjectEntity(2, "some-name-that-matches-openair", null, 0, 0);
         when(mockProjectRepository.getProjectEntityById(100)).thenReturn(stubbedProjectEntity);
 
-        ArrayList<Float> stubbedBurndown = new ArrayList<>();
+        ArrayList<BurndownPeriod> stubbedBurndown = new ArrayList<>();
         when(mockBurndownCsvParser.getBurndownForProjectEntity(stubbedProjectEntity)).thenReturn(stubbedBurndown);
 
         Optional<Project> project = projectService.getProjectById(100);

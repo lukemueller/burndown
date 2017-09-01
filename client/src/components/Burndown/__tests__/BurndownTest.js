@@ -1,10 +1,15 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 
 import Burndown from '../Burndown';
+import {Provider} from "react-redux";
+import {applyMiddleware, combineReducers, createStore} from "redux";
+import thunk from 'redux-thunk';
+import configureStore from 'redux-mock-store';
+
+const mockStore = configureStore([thunk]);
 
 describe('Burndown Component', () => {
-
     it('renders links for each project in the project list', () => {
         const projects = [
             {
@@ -16,14 +21,21 @@ describe('Burndown Component', () => {
                 name: "Test project 2"
             }
         ];
-        const wrapper = shallow(<Burndown {...{projects}} />);
 
-        const anchors = wrapper.find('a');
+        let store = mockStore({projects});
+        const wrapper = mount(<Burndown store={store} />);
+
+        const anchors = wrapper.find('button');
+
         expect(anchors.length).toEqual(2);
         expect(anchors.at(0).text()).toEqual("Test project 1");
-        expect(anchors.at(0).props().href).toEqual("projects/Test project 1");
+        expect(anchors.at(0).props().id).toEqual(14);
         expect(anchors.at(1).text()).toEqual("Test project 2");
-        expect(anchors.at(1).props().href).toEqual("projects/Test project 2");
+        expect(anchors.at(1).props().id).toEqual(15);
     });
 });
+
+//spring profiles
+//class path resources in java
+
 

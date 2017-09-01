@@ -1,20 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import {createStore, combineReducers, applyMiddleware} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
+import ReduxPromise from 'redux-promise';
 
-import thunk from 'redux-thunk';
-
-import {projects} from './reducers/ProjectsReducer';
+import reducer from './reducers';
 import Burndown from './components/Burndown/Burndown';
 
-const store = createStore(
-    combineReducers({projects}),
-    applyMiddleware(thunk)
-);
+const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 
 ReactDOM.render(
-    <Provider store={store}>
+    <Provider store={createStoreWithMiddleware(reducer)}>
         <Burndown/>
     </Provider>,
     document.getElementById('root')

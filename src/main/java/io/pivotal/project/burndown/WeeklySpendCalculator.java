@@ -2,6 +2,8 @@ package io.pivotal.project.burndown;
 
 import au.com.bytecode.opencsv.CSVReader;
 import io.pivotal.project.ProjectEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +18,7 @@ import java.util.TreeMap;
 @Component
 class WeeklySpendCalculator {
 
-    Map<LocalDate, Float> getWeeklySpendForProjectEntity(ProjectEntity projectEntity) {
-
+    Map<LocalDate, WeeklySpendPeriod> getWeeklySpendAndStaffForProjectEntity(ProjectEntity projectEntity) {
         ClassPathResource classPathResource = new ClassPathResource(projectEntity.getName() + ".csv");
         CSVReader reader = null;
         try {
@@ -27,7 +28,8 @@ class WeeklySpendCalculator {
             return Collections.emptyMap();
         }
 
-        HashMap<LocalDate, Float> weeklySpendInHours = new HashMap<>();
+        HashMap<LocalDate, WeeklySpendPeriod> weeklySpendInHours = new HashMap<>();
+
         try {
             String[] nextLine;
             reader.readNext(); // ignore header line
@@ -38,17 +40,21 @@ class WeeklySpendCalculator {
                 }
                 float value = Float.parseFloat(nextLine[5]);
 
-                Float existingValue = weeklySpendInHours.getOrDefault(key, 0f);
-                weeklySpendInHours.put(key, existingValue + value);
+
+                WeeklySpendPeriod existingWeeklySpend = weeklySpendInHours.getOrDefault(key, new WeeklySpendPeriod(0f, 0));
+                Float weeklySpend = existingWeeklySpend.getWeeklySpend();
+                Integer numberOfEmployees = existingWeeklySpend.getNumberOfEmployees();
+
+                weeklySpendInHours.put(key, new WeeklySpendPeriod(weeklySpend + value, numberOfEmployees+1));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        TreeMap<LocalDate, Float> weeklySpendInDollars = new TreeMap<>();
+        TreeMap<LocalDate, WeeklySpendPeriod> weeklySpendInDollars = new TreeMap<>();
         for (LocalDate key : weeklySpendInHours.keySet()) {
-            float spendInWeek = weeklySpendInHours.get(key) * projectEntity.getHourlyRate();
-            weeklySpendInDollars.put(key, spendInWeek);
+            float spendInWeek = weeklySpendInHours.get(key).getWeeklySpend() * projectEntity.getHourlyRate();
+            weeklySpendInDollars.put(key, new WeeklySpendPeriod(spendInWeek, weeklySpendInHours.get(key).getNumberOfEmployees()));
         }
 
         return weeklySpendInDollars;
