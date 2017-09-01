@@ -23,7 +23,6 @@ public class ProjectTest {
         assertThat(project.getId()).isEqualTo(projectEntity.getId());
         assertThat(project.getName()).isEqualTo(projectEntity.getName());
         assertThat(project.getStartDate()).isEqualTo(projectEntity.getStartDate());
-        assertThat(project.getProjectedEndDate()).isEqualTo(LocalDate.now());
         assertThat(project.getHourlyRate()).isEqualTo(projectEntity.getHourlyRate());
         assertThat(project.getBudget()).isEqualTo(projectEntity.getBudget());
         assertThat(project.getBurndown()).isEmpty();

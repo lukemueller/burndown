@@ -24,7 +24,7 @@ class ProjectController {
     }
 
     @GetMapping("projects/{projectId}")
-    ResponseEntity<ProjectApiRequestResponseWrapper> getProject(@PathVariable int projectId, @RequestParam(required = false, defaultValue = "6") Integer numberOfEmployees) {
+    ResponseEntity<ProjectApiRequestResponseWrapper> getProject(@PathVariable int projectId, @RequestParam(required = false, defaultValue = "0") Integer numberOfEmployees) {
         Optional<Project> maybeProject = projectService.getProjectById(projectId);
         if (!maybeProject.isPresent()) {
             return ResponseEntity.notFound().build();

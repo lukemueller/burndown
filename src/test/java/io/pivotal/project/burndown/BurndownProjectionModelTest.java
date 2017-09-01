@@ -16,8 +16,8 @@ public class BurndownProjectionModelTest {
     private Project project;
 
     public void setup(int startingBudget){
-        ArrayList<BurndownEntity> startingBurndown = new ArrayList<>();
-        BurndownEntity startingState = new BurndownEntity(LocalDate.now(),startingBudget);
+        ArrayList<BurndownPeriod> startingBurndown = new ArrayList<>();
+        BurndownPeriod startingState = new BurndownPeriod(LocalDate.now(),startingBudget, 1);
         startingBurndown.add(startingState);
 
         project = new Project();

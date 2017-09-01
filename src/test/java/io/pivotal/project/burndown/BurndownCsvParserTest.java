@@ -18,25 +18,25 @@ public class BurndownCsvParserTest {
         WeeklySpendCalculator mockWeeklySpendCalculator = mock(WeeklySpendCalculator.class);
         LocalDate startDate = LocalDate.of(2017, 2, 6);
 
-        HashMap<LocalDate, Float> stubbedWeeklySpendMap = new HashMap<>();
-        stubbedWeeklySpendMap.put(startDate.plusDays(7) , 50.00f);
-        stubbedWeeklySpendMap.put(startDate.plusDays(14), 100.00f);
+        HashMap<LocalDate, WeeklySpendPeriod> stubbedWeeklySpendMap = new HashMap<>();
+        stubbedWeeklySpendMap.put(startDate.plusDays(7) , new WeeklySpendPeriod(50.00f, 2));
+        stubbedWeeklySpendMap.put(startDate.plusDays(14),  new WeeklySpendPeriod(100.00f, 2));
 
         ProjectEntity project = new ProjectEntity();
         project.setName("some-project-name");
         project.setBudget(300);
         project.setStartDate(startDate);
         Mockito.when(
-            mockWeeklySpendCalculator.getWeeklySpendForProjectEntity(project)
+            mockWeeklySpendCalculator.getWeeklySpendAndStaffForProjectEntity(project)
         ).thenReturn(stubbedWeeklySpendMap);
 
         BurndownCsvParser parser = new BurndownCsvParser(mockWeeklySpendCalculator);
-        List<BurndownEntity> burndown = parser.getBurndownForProjectEntity(project);
+        List<BurndownPeriod> burndown = parser.getBurndownForProjectEntity(project);
 
         assertThat(burndown).containsExactly(
-                new BurndownEntity(startDate, 300f),
-                new BurndownEntity(startDate.plusDays(7), 250f),
-                new BurndownEntity(startDate.plusDays(14), 150f)
+                new BurndownPeriod(startDate, 300f, 2),
+                new BurndownPeriod(startDate.plusDays(7), 250f, 2),
+                new BurndownPeriod(startDate.plusDays(14), 150f, 2)
         );
     }
 }

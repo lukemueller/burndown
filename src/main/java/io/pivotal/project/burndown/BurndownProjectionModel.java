@@ -1,10 +1,8 @@
 package io.pivotal.project.burndown;
 
 import io.pivotal.project.Project;
-import org.apache.tomcat.jni.Local;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 /**
  * Created by devondapuzzo on 8/31/17.
@@ -15,8 +13,9 @@ public class BurndownProjectionModel {
     public static void buildOut(Project project){
         //TODO- CHECK ASSUMPTION THAT LAS BURNDOWN WILL ALWAYS REPRESENT A MONDAY FIGURE
         assert(project.getBurndown().size() > 0);
+        assert(project.getNumberOfEmployees() > 0);
 
-        BurndownEntity remainingBudget = project.getBurndown().get(project.getBurndown().size()-1);
+        BurndownPeriod remainingBudget = project.getBurndown().get(project.getBurndown().size()-1);
         Integer costPerDay = project.getHourlyRate() *  HOURS_PER_DAY * project.getNumberOfEmployees();
         Integer costPerWeek = costPerDay * 5;
 
