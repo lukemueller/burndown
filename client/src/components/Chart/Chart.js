@@ -2,59 +2,47 @@ import React, {Component} from "react";
 import {VictoryAxis, VictoryChart, VictoryLine, VictoryTheme} from "victory";
 import PropTypes from 'prop-types';
 
-const PROJECTED = "PROJECTED";
-const HISTORICAL = "HISTORICAL";
-
 class Chart extends Component{
     static propTypes = {
         project: PropTypes.object
     };
 
-    data = {};
-    ticks = [];
+    burndown = [];
+    projection = [];
+    ticks = {};
 
     constructor(props){
         super(props);
 
-        this.state={numberOfPeople: 6};
-
         this.setDefaultData();
-
-        this.incrementStaff = this.incrementStaff.bind(this);
-        this.decrementStaff = this.decrementStaff.bind(this);
-    }
-
-    incrementStaff(){
-        this.setState({numberOfPeople: this.state.numberOfPeople + 1});
-    }
-
-    decrementStaff(){
-        if(this.state.numberOfPeople > 1){
-            this.setState({numberOfPeople: this.state.numberOfPeople - 1});
-        }
     }
 
     setDefaultData(){
-        this.ticks= [];
-        this.data[PROJECTED] = [];
-        this.data[HISTORICAL]= [];
+        this.ticks= {
+            x: [],
+            y: []
+        };
+        this.burndown = [];
+        this.projection = [];
     }
 
     formatData() {
-        let data = this.data;
         let project = Object.assign({}, this.props.project);
 
         project.burndown.map(dataItem => {
-            data[HISTORICAL].push({x: new Date(dataItem.date), y: dataItem.budgetRemaining});
+            this.burndown.push({x: new Date(dataItem.date), y: dataItem.budget_remaining});
         });
 
-        this.ticks.push(data[HISTORICAL][data[HISTORICAL].length - 1].x);
-        this.ticks.push(data[HISTORICAL][0].x);
-    }
+        this.projection.push(this.burndown[this.burndown.length - 1]);
+        this.projection.push({x: new Date(project.projected_end_date), y: 0});
 
-    getDateWeeksLater(date, weeks){
-        let newDate = new Date(date);
-        return newDate.setDate(date.getDate() + 7*weeks);
+        this.ticks.x.push(this.projection[this.projection.length - 1].x);
+        this.ticks.x.push(this.projection[0].x);
+        this.ticks.x.push(this.burndown[0].x);
+
+        this.ticks.y.push(this.projection[this.projection.length - 1].y);
+        this.ticks.y.push(this.projection[0].y);
+        this.ticks.y.push(this.burndown[0].y)
     }
 
     renderProject(){
@@ -62,43 +50,21 @@ class Chart extends Component{
         this.formatData();
 
         let xAxisStartDate = new Date(this.props.project.start_date);
-
-        let xAxisEndDate = new Date(xAxisStartDate);
-        xAxisEndDate = xAxisEndDate.setDate(xAxisEndDate.getDate() + 7*8);
-
+        let xAxisEndDate = new Date(this.props.project.projected_end_date);
 
         return (
-            <VictoryChart padding={{left: 70, top: 15, bottom: 60, right: 60}}  >
+            <VictoryChart theme={VictoryTheme.material} height="400" width="600"
+                          padding={{left: 70, right:50, top:10, bottom: 50}}>
                 <VictoryAxis
-                    label="Date"
                     scale={{x:"time"}}
-                    tickValues={this.ticks}
-                    domain={[xAxisStartDate, xAxisEndDate]}
-                    tickFormat={(t) => t.toLocaleDateString('en-us', {year: 'numeric', month: 'short', day: 'numeric' })}
-                     style={{
-                         axis: {stroke: "#756f6a"},
-                         axisLabel: {fontSize: 15, padding: 30},
-                         grid: {stroke: "red"},
-                         ticks: {stroke: "grey", size: 5},
-                         tickLabels: {fontSize: 8, padding: 5},
-                     }}
-                    />
+                    tickValues={this.ticks.x}
+                    tickFormat={(t) => t.toLocaleDateString('en-us', {year: 'numeric', month: 'numeric', day: 'numeric' })}/>
 
                 <VictoryAxis dependentAxis
-                     domain={[0, this.props.project.budget]}
-                     theme={VictoryTheme.material}
-                     standalone={false}
-                     label="Money Remaining"
-                     tickFormat={(t) =>`$${t.toLocaleString()}`}
-                     style={{
-                         axis: {stroke: "#756f6a"},
-                         axisLabel: {fontSize: 15, padding: 50},
-                         tickLabels: {fontSize: 8, padding: 5},
-                         grid: {stroke: "grey"},
-                     }}
-
-                />
-                <VictoryLine style={{data: { stroke: "red" }, parent: { border: "1px solid #red"}}} data={this.data[HISTORICAL]}/>
+                     tickValues={this.ticks.y}
+                     tickFormat={(t) =>`$${t.toLocaleString()}`}/>
+                <VictoryLine style={{data: { stroke: "red" }, parent: { border: "1px solid #red"}}} data={this.burndown}/>
+                <VictoryLine style={{data: { stroke: "blue" }, parent: { border: "1px solid #red"}}} data={this.projection}/>
             </VictoryChart>
         )
     }
@@ -111,7 +77,7 @@ class Chart extends Component{
                         {this.props.project.name}
                     </h1>
                     <div>
-                        <h2>Number of people: {this.state.numberOfPeople}</h2>
+                        <h2>Number of people: {this.props.project.number_of_employees}</h2>
                         <button className="btn btn-light" onClick={this.decrementStaff}>-</button>
                         <button className="btn btn-light" onClick={this.incrementStaff}>+</button>
                     </div>

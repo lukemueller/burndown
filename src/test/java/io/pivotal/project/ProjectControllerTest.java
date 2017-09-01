@@ -73,7 +73,7 @@ public class ProjectControllerTest {
         Project stubbedProject = new Project();
         when(mockProjectService.getProjectById(57)).thenReturn(Optional.of(stubbedProject));
 
-        ResponseEntity<ProjectApiRequestResponseWrapper> projectWrapper = controller.getProject(57);
+        ResponseEntity<ProjectApiRequestResponseWrapper> projectWrapper = controller.getProject(57, null);
 
         assertThat(projectWrapper.getBody().getProject()).isSameAs(stubbedProject);
     }
@@ -82,7 +82,7 @@ public class ProjectControllerTest {
     public void getProject_delegatesProjectIdDownToProjectService() throws Exception {
         when(mockProjectService.getProjectById(anyInt())).thenReturn(Optional.of(new Project()));
 
-        controller.getProject(57);
+        controller.getProject(57, null);
         Mockito.verify(mockProjectService).getProjectById(57);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();

@@ -21,6 +21,11 @@ public class Project {
     @JsonProperty("start_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate startDate;
+    @JsonProperty("projected_end_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate projectedEndDate;
+    @JsonProperty("number_of_employees")
+    private int numberOfEmployees;
     private int budget; // TODO - should expand to List<SOW> domain objects
     private List<BurndownEntity> burndown;
 
@@ -31,5 +36,6 @@ public class Project {
         this.startDate = projectEntity.getStartDate();
         this.budget = projectEntity.getBudget();
         this.burndown = new ArrayList<>();
+        this.projectedEndDate = LocalDate.now();
     }
 }

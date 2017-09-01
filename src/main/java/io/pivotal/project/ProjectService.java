@@ -2,6 +2,7 @@ package io.pivotal.project;
 
 import io.pivotal.project.burndown.BurndownCsvParser;
 import io.pivotal.project.burndown.BurndownEntity;
+import io.pivotal.project.burndown.BurndownProjectionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,5 +76,10 @@ class ProjectService {
             .budget(savedProjectEntity.getBudget())
             .burndown(Collections.emptyList())
             .build();
+    }
+
+    public void buildProjection(Project project, Integer numberOfEmployees) {
+        project.setNumberOfEmployees(numberOfEmployees);
+        BurndownProjectionModel.buildOut(project);
     }
 }
